@@ -1,0 +1,97 @@
+<div id="app">
+  <div id="stage">
+    <div id="labels"></div>
+    <div id="floorchip">Exterior</div>
+    <div id="loading">Building materials and lighting…</div>
+    <div id="pad" aria-label="Walk controls">
+      <span></span><button data-k="f" aria-label="Forward">&uarr;</button><span></span>
+      <button data-k="l" aria-label="Turn left">&larr;</button><button data-k="b" aria-label="Back">&darr;</button><button data-k="r" aria-label="Turn right">&rarr;</button>
+    </div>
+    <div id="kmenu" role="menu" aria-label="Kynan" hidden>
+      <p>Kynan</p>
+      <button type="button" role="menuitem" data-act="bounce">Bounce the ball</button>
+      <button type="button" role="menuitem" data-act="shoot">Shoot the ball in the hoop</button>
+      <button type="button" class="x" aria-label="Close">Close</button>
+    </div>
+    <div id="cmenu" role="menu" aria-label="Coffee machine" hidden>
+      <p>Choose your latte art:</p>
+      <button type="button" role="menuitem" data-art="swan"><b>1.</b> Swan</button>
+      <button type="button" role="menuitem" data-art="heart"><b>2.</b> Love heart</button>
+      <button type="button" class="x">Close</button>
+    </div>
+    <div id="vr" hidden>
+      <div class="vr-lens"></div>
+      <div class="vr-top"><span class="vr-chip">Barista · first person</span><button type="button" id="vr-exit">Exit <kbd>Esc</kbd></button></div>
+      <div class="vr-bar"><i id="vr-bar"></i></div>
+      <div class="vr-card" id="vr-card"><small id="vr-step">Step 1 of 3</small><h3 id="vr-title"></h3><p id="vr-desc"></p><span id="vr-timer" hidden>00 s</span></div>
+      <div class="vr-end" id="vr-end" hidden><h3 id="vr-endtitle">Your latte is ready</h3><p>Enjoy. Make another or step back into the walk-through.</p>
+        <div><button type="button" id="vr-again">Make another</button><button type="button" id="vr-done">Done</button></div></div>
+    </div>
+    <div id="jumpmark" hidden></div>
+    <div id="hint">Click anywhere to jump there · drag to orbit · scroll to zoom</div>
+  </div>
+  <aside>
+    <div class="brand">
+      <h1>AIIMS <span>Office</span></h1>
+      <p>Two-storey office and warehouse, rebuilt in 3D from the floor plans and site photos.</p>
+    </div>
+    <div class="sec">
+      <h2>Spaces</h2>
+      <div class="spaces" role="group" aria-label="Spaces">
+        <button id="sp-lounge" data-view="sp-lounge" aria-pressed="false"><span>Entry lounge</span><small>Ground</small></button>
+        <button id="sp-walk" data-view="sp-walk" aria-pressed="false"><span>Entry · walk-through</span><small>Ground</small></button>
+        <button id="sp-ware" data-view="sp-ware" aria-pressed="false"><span>Warehouse</span><small>Ground</small></button>
+        <button id="sp-kynan" data-view="sp-kynan" aria-pressed="false"><span>Warehouse · Kynan</span><small>Ground</small></button>
+        <button id="sp-window" data-view="sp-window" aria-pressed="false"><span>Warehouse · podcast window</span><small>Ground</small></button>
+        <button id="sp-photo" data-view="sp-photo" aria-pressed="false"><span>Storage · photo area</span><small>Ground</small></button>
+        <button id="sp-studio" data-view="sp-studio" aria-pressed="false"><span>Storage · podcast set</span><small>Ground</small></button>
+        <button id="sp-desks" data-view="sp-desks" aria-pressed="false"><span>Storage · black desks</span><small>Ground</small></button>
+        <button id="sp-front" data-view="sp-front" aria-pressed="false"><span>Front open area</span><small>Upper</small></button>
+        <button id="sp-common" data-view="sp-common" aria-pressed="false"><span>Common Area</span><small>Upper</small></button>
+        <button id="sp-design" data-view="sp-design" aria-pressed="false"><span>Design</span><small>Upper</small></button>
+        <button id="sp-court" data-view="sp-court" aria-pressed="false"><span>Courtyard</span><small>Upper</small></button>
+        <button id="sp-kitchen" data-view="sp-kitchen" aria-pressed="false"><span>Kitchen</span><small>Upper</small></button>
+        <button id="sp-dining" data-view="sp-dining" aria-pressed="false"><span>Kitchen · dining nook</span><small>Upper</small></button>
+        <button id="sp-office" data-view="sp-office" aria-pressed="false"><span>East open area</span><small>Upper</small></button>
+      </div>
+    </div>
+    <div class="sec">
+      <h2>View</h2>
+      <div class="views" role="group" aria-label="View">
+        <button id="v-ext" data-view="ext" aria-pressed="true">Exterior<small>Street side</small></button>
+        <button id="v-gf" data-view="gf" aria-pressed="false">Ground<small>FFL 0.00</small></button>
+        <button id="v-uf" data-view="uf" aria-pressed="false">Upper<small>FFL +4.45</small></button>
+        <button id="v-exp" data-view="exp" aria-pressed="false">Exploded<small>Both levels</small></button>
+        <button id="v-walk" data-view="walk" aria-pressed="false">Walk<small>Eye 1.65 m</small></button>
+        <button id="v-top" data-view="top" aria-pressed="false">Plan<small>Top down</small></button>
+      </div>
+      <div class="seg" id="walkfloor" role="group" aria-label="Walk floor" hidden>
+        <button id="wf-gf" data-f="GF" aria-pressed="true">Walk ground</button>
+        <button id="wf-uf" data-f="UF" aria-pressed="false">Walk upper</button>
+      </div>
+    </div>
+    <div class="sec">
+      <h2>Layers</h2>
+      <label class="tog">Office fit-out<em>illustrative</em><input type="checkbox" id="l-fit" checked><span class="sw"></span></label>
+      <label class="tog">Room labels<input type="checkbox" id="l-lbl" checked><span class="sw"></span></label>
+      <label class="tog">Stair<em>provisional</em><input type="checkbox" id="l-stair" checked><span class="sw"></span></label>
+      <label class="tog">Sunshade fins<input type="checkbox" id="l-fac" checked><span class="sw"></span></label>
+      <label class="tog">Curtains<input type="checkbox" id="l-cur" checked><span class="sw"></span></label>
+      <label class="tog">Roof<em>provisional</em><input type="checkbox" id="l-roof" checked><span class="sw"></span></label>
+      <label class="tog">Realistic lighting<em>AO + glow</em><input type="checkbox" id="l-hq" checked><span class="sw"></span></label>
+    </div>
+    <div class="sec">
+      <h2>Key dimensions</h2>
+      <dl class="spec">
+        <dt>Footprint</dt><dd>16.84 × 25.86 m</dd>
+        <dt>Warehouse</dt><dd>13.0 × 5.5 m</dd>
+        <dt>Warehouse height</dt><dd>4.20 m</dd>
+        <dt>Kitchen</dt><dd>6.1 × 5.6 m</dd>
+        <dt>Entry lounge counter</dt><dd>R 3.85 m</dd>
+        <dt>Upper floor level</dt><dd>+4.45 m est.</dd>
+        <dt>Workstations shown</dt><dd>38</dd>
+      </dl>
+    </div>
+    <p class="note"><b>How to read this.</b> Walls, glazing, doors, joinery and amenities come from the calibrated Review 01 reconstruction. The entry lounge, courtyard, warehouse, storage studio, kitchen, front open area, design room and east open area are finished from site photos. The street frontage, sign tower, neighbouring warehouse, parking canopy and the AIIMS Jimny follow the street photo. Other desks, tables and plants are an illustrative fit-out. The roof, upper floor level and stair are estimates.</p>
+  </aside>
+</div>
