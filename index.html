@@ -2110,6 +2110,12 @@ function frame(now) {
 resize(); camera.position.set(...PRESETS.ext.pos); controls.target.set(...PRESETS.ext.tgt); refresh();
 document.getElementById('loading').hidden = true;
 requestAnimationFrame(frame);
+// Deep links: index.html#sp-kitchen opens a space; an embedding page can postMessage({ aiimsView: 'sp-kitchen' }).
+const openView = v => { const b = document.querySelector(`[data-view="${CSS.escape(v || '')}"]`); if (b) b.click(); };
+addEventListener('hashchange', () => openView(decodeURIComponent(location.hash.slice(1))));
+addEventListener('message', e => { if (e.data && typeof e.data.aiimsView === 'string') openView(e.data.aiimsView); });
+if (location.hash) openView(decodeURIComponent(location.hash.slice(1)));
+if (parent !== window) parent.postMessage({ aiimsReady: true }, '*');
 window.__setView = setView;
 window.__renderOnce = (n = 1) => { if (tween) { camera.position.copy(tween.to.p); controls.target.copy(tween.to.t); tween = null; } for (let k = 0; k < n; k++) { state.explode = state.explodeTarget; frame(performance.now()); } };
 window.__pose = (x, y, z, yaw, pitch) => { walk.pos.set(x, z, -y); walk.yaw = yaw; walk.pitch = pitch; };

@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Office Tour | AIIMS Group</title>
+<meta name="description" content="Step inside AIIMS Group HQ in Strathfield South, Sydney. Explore our two-storey office, warehouse, podcast set, courtyard and kitchen in an interactive 3D tour.">
+<link rel="icon" href="https://aiims.group/wp-content/uploads/2025/01/favicon.png">
+<meta property="og:title" content="Office Tour | AIIMS Group">
+<meta property="og:description" content="Walk through AIIMS Group HQ in interactive 3D.">
+<style>
+/* Brand fonts are served by aiims.group's theme. They load when this page is hosted on aiims.group
+   (same origin); elsewhere the stack falls back to Helvetica Neue / Arial. */
+@font-face{font-family:Interphases;font-weight:400;font-display:swap;src:url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-Regular.woff2) format("woff2"),url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-Regular.woff) format("woff")}
+@font-face{font-family:Interphases;font-weight:500;font-display:swap;src:url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-Medium.woff2) format("woff2"),url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-Medium.woff) format("woff")}
+@font-face{font-family:Interphases;font-weight:600;font-display:swap;src:url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-DemiBold.woff2) format("woff2"),url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-DemiBold.woff) format("woff")}
+@font-face{font-family:Interphases;font-weight:700;font-display:swap;src:url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-Bold.woff2) format("woff2"),url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-Bold.woff) format("woff")}
+@font-face{font-family:Interphases;font-weight:800 900;font-display:swap;src:url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-ExtraBold.woff2) format("woff2"),url(https://aiims.group/wp-content/themes/aiims/fonts/Interphases-ExtraBold.woff) format("woff")}
+@font-face{font-family:InterphasesMono;font-weight:400;font-display:swap;src:url(https://aiims.group/wp-content/themes/aiims/fonts/InterphasesMono-Regular.woff2) format("woff2"),url(https://aiims.group/wp-content/themes/aiims/fonts/InterphasesMono-Regular.woff) format("woff")}
+@font-face{font-family:InterphasesMono;font-weight:700;font-display:swap;src:url(https://aiims.group/wp-content/themes/aiims/fonts/InterphasesMono-Bold.woff2) format("woff2"),url(https://aiims.group/wp-content/themes/aiims/fonts/InterphasesMono-Bold.woff) format("woff")}
+
+/* Tokens copied from the aiims.group theme (--ahx-*) */
+:root{
+  --black:#0E0E0E; --raised:#171717; --grey:#EFEFEF; --grey-72:rgba(239,239,239,.72); --grey-50:rgba(239,239,239,.5);
+  --line:rgba(239,239,239,.1); --line-strong:rgba(239,239,239,.28); --orange:#F5412C; --stone:#9A9E8E;
+  --ink:#0E0E0E; --ink-60:rgba(14,14,14,.62); --ink-line:rgba(14,14,14,.12);
+  --sans:"Interphases","TT Interphases Pro","Helvetica Neue",Arial,sans-serif;
+  --mono:"InterphasesMono","TT Interphases Pro Mono",ui-monospace,Menlo,Consolas,monospace;
+  --radius:4px; --gutter:70px; --bar-h:76px; --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--black);color:var(--grey);font:400 16px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+img,svg{display:block}
+.wrap{max-width:1440px;margin:0 auto;padding:0 var(--gutter)}
+.mono{font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+
+/* Buttons — match the site's CTA (orange, 4px) and ghost (mono, hairline) styles */
+.btn{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 22px;border-radius:var(--radius);border:1px solid var(--orange);background:var(--orange);color:#EFEFEF;font:600 15px/1 var(--sans);text-decoration:none;cursor:pointer;transition:background .2s var(--ease),border-color .2s var(--ease),color .2s var(--ease)}
+.btn:hover{background:#d93320;border-color:#d93320}
+.btn.ghost{background:transparent;border-color:var(--line-strong);font:700 11px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase}
+.btn.ghost:hover{border-color:var(--grey)}
+.btn .arr{transition:transform .2s var(--ease)}
+.btn:hover .arr{transform:translateX(3px)}
+
+/* Header */
+.bar{position:sticky;top:0;z-index:20;height:var(--bar-h);background:rgba(14,14,14,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.bar .wrap{height:100%;display:flex;align-items:center;gap:32px}
+.logo{color:var(--grey);width:84px;flex:none}
+.logo svg{width:100%;height:auto}
+.nav{display:flex;gap:26px;margin-left:auto}
+.nav a{color:var(--grey-72);text-decoration:none;font-size:15px;font-weight:500}
+.nav a:hover,.nav a[aria-current]{color:var(--grey)}
+.bar .cta{display:flex;gap:10px}
+.bar .btn{min-height:40px;padding:0 16px}
+
+/* Hero */
+.hero{padding:96px 0 72px;border-bottom:1px solid var(--line)}
+.eyebrow{display:flex;align-items:center;gap:10px;color:var(--grey-72);margin:0 0 28px}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--orange)}
+.hero h1{margin:0;max-width:13ch;font-size:clamp(44px,7.4vw,112px);line-height:.95;font-weight:700;letter-spacing:-.035em}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero .lede{max-width:560px;margin:32px 0 0;font-size:19px;line-height:1.5;color:var(--grey-72)}
+.hero .actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:40px}
+.facts{display:grid;grid-template-columns:repeat(4,1fr);margin-top:80px;border-top:1px solid var(--line)}
+.facts div{padding:22px 24px 0 0}
+.facts div+div{padding-left:24px;border-left:1px solid var(--line)}
+.facts b{display:block;font-size:40px;line-height:1;font-weight:700;letter-spacing:-.03em}
+.facts span{display:block;margin-top:10px;color:var(--grey-50)}
+
+/* Tour */
+.tour{padding:64px 0 88px}
+.tour-head{display:flex;align-items:end;justify-content:space-between;gap:24px;margin-bottom:22px}
+h2{margin:0;font-size:clamp(32px,3.4vw,48px);line-height:1;font-weight:900;letter-spacing:-.03em;text-transform:uppercase}
+.tour-head p{margin:12px 0 0;color:var(--grey-72)}
+.frame{position:relative;height:min(82vh,860px);min-height:520px;border:1px solid var(--line-strong);border-radius:var(--radius);overflow:hidden;background:var(--raised)}
+.frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.frame .poster{position:absolute;inset:0;display:grid;place-items:center;text-align:center;color:var(--grey-50);pointer-events:none}
+.tour-foot{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px 24px;margin-top:14px;color:var(--grey-50)}
+.tour-foot a{color:var(--grey-72)}
+
+/* Spaces (light band, like the site's content sections) */
+.spaces{background:var(--grey);color:var(--ink);padding:96px 0}
+.spaces .intro{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:end;margin-bottom:48px}
+.spaces .intro p{margin:0;max-width:520px;color:var(--ink-60);font-size:17px}
+.level{margin-top:36px}
+.level h3{margin:0 0 14px;color:var(--ink-60)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.space{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:138px;padding:20px;border:1px solid var(--ink-line);border-radius:var(--radius);background:#F8F8F7;color:var(--ink);text-align:left;font:inherit;cursor:pointer;transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease)}
+.space:hover{border-color:var(--ink);background:#fff;transform:translateY(-2px)}
+.space strong{font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
+.space small{display:block;margin-top:6px;color:var(--ink-60);font-size:14px;line-height:1.4}
+.space .go{display:flex;align-items:center;justify-content:space-between;color:var(--ink-60)}
+.space:hover .go{color:var(--orange)}
+
+/* Things to try */
+.try{padding:96px 0;border-bottom:1px solid var(--line)}
+.try .cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:44px}
+.card{padding:28px;border:1px solid var(--line);border-radius:var(--radius);background:var(--raised)}
+.card .mono{color:var(--orange)}
+.card h3{margin:18px 0 10px;font-size:24px;line-height:1.15;font-weight:700;letter-spacing:-.02em}
+.card p{margin:0;color:var(--grey-72)}
+.card button{margin-top:22px}
+
+/* Visit CTA */
+.visit{background:var(--orange);color:#fff;padding:88px 0}
+.visit .wrap{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:end}
+.visit h2{font-size:clamp(36px,5vw,72px)}
+.visit p{margin:18px 0 0;font-size:18px;max-width:520px}
+.visit .actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
+.visit .btn{background:var(--black);border-color:var(--black)}
+.visit .btn:hover{background:#000}
+.visit .btn.ghost{background:transparent;border-color:rgba(255,255,255,.6)}
+.visit .btn.ghost:hover{border-color:#fff}
+
+/* Footer */
+footer{padding:72px 0 40px;color:var(--grey-72)}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:40px}
+.foot .logo{width:110px;margin-bottom:18px}
+.foot h4{margin:0 0 14px;color:var(--grey)}
+.foot ul{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.foot a{text-decoration:none}
+.foot a:hover{color:var(--grey)}
+.legal{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:56px;padding-top:24px;border-top:1px solid var(--line);font-size:14px}
+.legal a{color:var(--grey-50);text-decoration:none}
+.legal a:hover{color:var(--grey)}
+.ack{margin:20px 0 0;max-width:820px;font-size:13px;color:var(--grey-50)}
+
+@media (max-width:1100px){
+  :root{--gutter:40px}
+  .nav{display:none}
+  .bar .cta{margin-left:auto}
+  .grid{grid-template-columns:repeat(3,1fr)}
+  .foot{grid-template-columns:1fr 1fr}
+}
+@media (max-width:760px){
+  :root{--gutter:16px;--bar-h:64px}
+  .logo{width:70px}
+  .bar .cta .call{display:none}
+  .hero{padding:56px 0 48px}
+  .hero .lede{font-size:17px}
+  .facts{grid-template-columns:1fr 1fr;margin-top:48px}
+  .facts div{padding:18px 12px 18px 0}
+  .facts div+div{padding-left:0;border-left:0}
+  .facts div:nth-child(even){padding-left:16px;border-left:1px solid var(--line)}
+  .facts div:nth-child(n+3){border-top:1px solid var(--line)}
+  .facts b{font-size:32px}
+  .tour{padding:40px 0 56px}
+  .tour-head{flex-direction:column;align-items:start}
+  .frame{height:78vh;min-height:480px}
+  .spaces,.try{padding:64px 0}
+  .spaces .intro{grid-template-columns:1fr;gap:16px}
+  .grid{grid-template-columns:1fr 1fr;gap:8px}
+  .space{min-height:120px;padding:16px;gap:18px}
+  .space strong{font-size:16px}
+  .space small{display:none}
+  .try .cards{grid-template-columns:1fr}
+  .visit{padding:64px 0}
+  .visit .wrap{grid-template-columns:1fr}
+  .visit .actions{justify-content:flex-start}
+  .foot{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="aiims-logo" viewBox="0 0 929 239">
+    <path d="M727.491 238.681C711.569 238.681 697.085 235.917 684.038 230.388C671.212 224.639 660.819 216.236 652.858 205.179C644.897 193.901 640.585 180.301 639.921 164.379H695.648C695.869 172.34 698.743 178.753 704.272 183.618C710.021 188.262 717.761 190.584 727.491 190.584C735.01 190.584 740.87 189.589 745.071 187.599C749.494 185.387 752.7 182.623 754.691 179.306C756.681 175.768 757.676 171.787 757.676 167.365C757.676 162.5 756.017 158.519 752.7 155.423C749.383 152.106 745.182 149.453 740.096 147.462C735.01 145.472 727.933 143.15 718.867 140.497C704.272 136.295 692.22 131.983 682.711 127.56C673.202 122.916 664.91 115.84 657.833 106.331C650.978 96.8224 647.551 84.1071 647.551 68.1854C647.551 52.927 651.199 40.2117 658.497 30.0395C666.015 19.8673 675.856 12.3486 688.018 7.48367C700.181 2.39755 713.338 -0.145508 727.491 -0.145508C746.509 -0.145508 762.209 3.06096 774.593 9.47388C787.198 15.8868 796.375 24.4005 802.124 35.015C808.095 45.6295 811.301 57.4603 811.744 70.5073H756.018C755.354 63.431 752.7 57.9026 748.057 53.9221C743.634 49.9417 737.442 47.9515 729.481 47.9515C723.953 47.9515 719.309 48.836 715.55 50.6051C711.79 52.3742 708.916 54.8067 706.925 57.9026C705.156 60.9985 704.272 64.4261 704.272 68.1854C704.272 73.4926 706.041 77.9153 709.579 81.4535C713.117 84.7705 717.429 87.5347 722.516 89.7461C727.823 91.7363 735.231 94.2794 744.74 97.3753C759.335 102.019 771.276 106.552 780.564 110.975C789.851 115.398 797.812 122.142 804.446 131.209C811.08 140.276 814.397 152.327 814.397 167.365C814.397 181.738 810.859 194.343 803.783 205.179C796.706 216.014 786.534 224.307 773.266 230.057C760.219 235.806 744.961 238.681 727.491 238.681Z" fill="currentColor"/>
+    <path d="M382.389 235.36V3.16748H457.022L505.119 159.068H506.778L555.207 3.16748H628.181V235.36H576.767V79.1275H575.109L526.348 235.36H484.222L435.462 79.1275H433.803V235.36H382.389Z" fill="currentColor"/>
+    <path d="M304.121 235.36V3.16748H358.521V235.36H304.121Z" fill="currentColor"/>
+    <path d="M227.83 235.36V3.16748H282.229V235.36H227.83Z" fill="currentColor"/>
+    <path d="M0 235.36L70.6528 3.16748H137.657L208.31 235.36H153.579L104.155 58.8936H102.496L53.4042 235.36H0ZM48.7604 193.565L67.0041 147.458H142.632L160.544 193.565H48.7604Z" fill="currentColor"/>
+    <path fill="#F5412C" d="M926.008 7.3885C926.534 7.21333 927.03 7.27172 927.497 7.56366C928.023 7.79721 928.402 8.14754 928.636 8.61465C928.928 9.02336 929.044 9.49047 928.986 10.016C928.986 10.4831 928.753 10.921 928.285 11.3297C927.935 11.6216 927.585 11.9136 927.234 12.2055C926.884 12.4975 926.534 12.7894 926.183 13.0813C926.008 13.5484 925.775 13.9863 925.483 14.3951C925.249 14.7454 924.987 15.1541 924.695 15.6212C923.176 17.9567 921.571 20.2339 919.878 22.4526C918.301 24.613 916.695 26.7441 915.061 28.8461C913.484 30.9481 911.908 33.0792 910.331 35.2396C908.638 37.4583 906.974 39.6479 905.339 41.8083C903.704 43.9686 902.069 46.1582 900.434 48.3769C899.091 50.3621 897.719 52.3765 896.318 54.4201C894.917 56.4053 893.807 58.5364 892.99 60.8136C893.165 61.3391 893.165 61.8646 892.99 62.39C892.815 62.9155 892.435 63.3243 891.851 63.6162L891.063 64.1417C889.895 64.8423 888.844 64.8715 887.91 64.2293C886.976 63.5286 886.45 62.5944 886.334 61.4266C886.158 60.0837 886.275 58.77 886.684 57.4854C887.151 56.2009 887.735 54.9456 888.436 53.7194C889.136 52.4933 889.924 51.3255 890.8 50.2161C891.676 49.0484 892.464 47.9682 893.165 46.9756C894.683 44.8152 896.23 42.6841 897.807 40.5821C899.383 38.4801 901.018 36.4074 902.711 34.3638C904.171 32.4954 905.631 30.6561 907.091 28.8461C908.609 27.0361 910.127 25.1969 911.645 23.3284C911.119 23.7955 910.565 24.2335 909.981 24.6422C909.455 25.0509 908.959 25.4888 908.492 25.9559C906.974 27.2404 905.456 28.5542 903.938 29.8971C902.478 31.24 901.047 32.6413 899.646 34.101C898.186 35.5607 896.814 37.108 895.53 38.7429C894.245 40.3194 892.902 41.8083 891.501 43.2096C890.8 43.9102 890.041 44.3481 889.224 44.5233C888.406 44.6985 887.647 44.6401 886.947 44.3481C886.246 44.0562 885.662 43.5599 885.195 42.8592C884.728 42.1586 884.494 41.312 884.494 40.3194C884.494 38.8013 884.757 37.2832 885.283 35.7651C885.867 34.1886 886.48 32.6705 887.122 31.2108C886.304 32.2618 885.516 33.3128 884.757 34.3638C883.998 35.4148 883.21 36.4366 882.392 37.4291C880.641 39.8814 878.918 42.3046 877.225 44.6985C875.532 47.0924 873.926 49.5447 872.408 52.0554C871.649 53.3399 870.89 54.6244 870.131 55.909C869.43 57.1351 868.759 58.4197 868.117 59.7626C867.825 60.2881 867.503 60.872 867.153 61.5142C866.861 62.0981 866.686 62.7112 866.628 63.3535C866.569 63.8206 866.54 64.0541 866.54 64.0541C866.598 64.0541 866.978 64.1125 867.679 64.2293C868.496 64.4628 869.08 64.9883 869.43 65.8057C869.781 66.6232 869.722 67.4114 869.255 68.1705C868.788 68.9295 868.204 69.4842 867.503 69.8345C866.803 70.2432 866.044 70.4768 865.226 70.5352C864.467 70.5936 863.679 70.4768 862.862 70.1848C862.044 69.9513 861.344 69.5426 860.76 68.9587C859.475 67.6742 858.804 66.1853 858.745 64.492C858.687 62.7404 858.95 61.1055 859.534 59.5874C860.876 56.1425 862.57 52.8436 864.613 49.6906C866.657 46.4793 868.73 43.3847 870.832 40.4069C875.211 34.2762 879.765 28.3206 884.494 22.5402C889.224 16.7014 894.012 10.8918 898.858 5.11136V5.19895C899.267 4.79023 899.734 4.55668 900.259 4.49829C900.843 4.38151 901.369 4.41071 901.836 4.58587C902.303 4.76104 902.711 5.05298 903.062 5.46169C903.471 5.81202 903.704 6.24993 903.762 6.77543C904.346 7.06737 904.551 7.56366 904.376 8.26432C904.025 9.72402 903.471 11.1253 902.711 12.4683C902.011 13.7528 901.31 15.0665 900.609 16.4094C899.967 17.694 899.325 18.9493 898.683 20.1755C898.04 21.4016 897.398 22.657 896.756 23.9415C896.114 25.226 895.501 26.5106 894.917 27.7951C894.333 29.0213 893.778 30.3058 893.253 31.6487C893.545 31.3568 893.866 31.0357 894.216 30.6853C894.566 30.335 894.887 29.9847 895.179 29.6343C898.216 26.5982 901.398 23.6788 904.726 20.8761C906.302 19.5916 907.908 18.2779 909.543 16.9349C911.236 15.592 912.959 14.3367 914.71 13.1689C916.52 11.9428 918.359 10.8334 920.228 9.8408C922.096 8.8482 924.023 8.03077 926.008 7.3885Z"/>
+    <path fill="#F5412C" d="M897.05 4.23733C897.692 4.47088 898.159 4.82121 898.451 5.28831C898.802 5.75542 898.977 6.28091 898.977 6.86479C898.977 7.39028 898.802 7.91578 898.451 8.44127C898.159 8.90837 897.692 9.2587 897.05 9.49225C894.539 10.4265 891.853 10.9228 888.992 10.9811C886.131 10.9811 883.358 11.0979 880.672 11.3315C879.154 11.4483 877.665 11.5942 876.205 11.7694C874.804 11.8862 873.344 12.0321 871.826 12.2073C871.184 13.1999 870.425 14.1633 869.549 15.0975C868.732 15.9733 867.973 16.9075 867.272 17.9001C866.455 18.9511 865.696 20.0313 864.995 21.1407C864.294 22.25 863.564 23.3594 862.805 24.4688C861.287 26.7459 859.769 29.0523 858.251 31.3878C856.791 33.6649 855.361 36.0004 853.96 38.3943C852.558 40.7299 851.186 43.0946 849.843 45.4885C848.559 47.8824 847.479 50.3931 846.603 53.0205C846.311 53.8964 846.019 54.8598 845.727 55.9108C845.493 56.9617 845.523 57.9835 845.814 58.9761C846.106 59.7936 846.632 60.465 847.391 60.9905C848.15 61.4576 848.705 62.0707 849.055 62.8297C849.347 63.472 849.464 64.1435 849.405 64.8441C849.405 65.5448 849.113 66.1579 848.529 66.6834C847.362 67.8511 845.96 68.289 844.326 67.9971C842.691 67.7051 841.289 67.0629 840.122 66.0703C838.954 65.0777 838.049 63.8515 837.407 62.3918C836.764 60.9321 836.385 59.4432 836.268 57.9251C836.151 56.2903 836.297 54.6262 836.706 52.933C837.056 51.2397 837.582 49.6048 838.282 48.0284C838.925 46.3935 839.684 44.817 840.56 43.2989C841.377 41.7225 842.194 40.2336 843.012 38.8322C844.763 35.6793 846.632 32.6431 848.617 29.7237C850.661 26.8043 852.704 23.8557 854.748 20.8779C855.507 19.8269 856.266 18.7176 857.025 17.5498C857.842 16.3237 858.689 15.1267 859.565 13.9589C856.003 14.5428 852.383 15.2435 848.705 16.0609C849.23 16.4112 849.551 16.9075 849.668 17.5498C849.843 18.1337 849.843 18.7468 849.668 19.389C849.551 19.9729 849.23 20.4984 848.705 20.9655C848.238 21.3742 847.624 21.6078 846.865 21.6662C845.347 21.7829 843.683 21.8121 841.873 21.7537C840.063 21.6954 838.487 21.345 837.144 20.7028C835.743 20.0605 834.867 19.0387 834.516 17.6374C834.166 16.1777 834.458 14.8348 835.392 13.6086C835.801 13.0247 836.356 12.5284 837.056 12.1197C837.699 11.6526 838.399 11.2731 839.158 10.9811C839.859 10.6308 840.618 10.3389 841.435 10.1053C842.194 9.87178 842.924 9.66742 843.625 9.49225C845.26 9.02515 846.895 8.61643 848.529 8.2661C850.164 7.91577 851.828 7.59464 853.522 7.3027C857.2 6.66043 860.849 6.07655 864.469 5.55106C868.148 4.96718 871.826 4.50007 875.505 4.14975C877.315 4.03297 879.125 3.91619 880.935 3.79942C882.745 3.68264 884.584 3.56587 886.453 3.44909C888.263 3.33231 890.043 3.27393 891.795 3.27393C893.605 3.27393 895.357 3.59506 897.05 4.23733Z"/>
+  </symbol>
+</svg>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="logo" href="https://aiims.group/" aria-label="AIIMS Group home"><svg viewBox="0 0 929 239" role="img" aria-label="AIIMS Group"><use href="#aiims-logo"/></svg></a>
+    <nav class="nav" aria-label="Main">
+      <a href="https://aiims.group/services/">Services</a>
+      <a href="https://aiims.group/aiims-creator-hub/">Creator Hub</a>
+      <a href="https://aiims.group/case-studies/">Case Studies</a>
+      <a href="https://aiims.group/about-aiims-group/">About</a>
+      <a href="#tour" aria-current="page">Office Tour</a>
+    </nav>
+    <div class="cta">
+      <a class="btn ghost call" href="tel:1300397603">Call</a>
+      <a class="btn" href="https://aiims.group/contact/">Let’s talk</a>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <p class="eyebrow mono"><i></i>AIIMS HQ · Strathfield South, Sydney</p>
+      <h1>Step inside <em>AIIMS</em> HQ.</h1>
+      <p class="lede">Walk through our two-storey office and warehouse in 3D. Start in the entry lounge, then visit the podcast set, design studio, courtyard and kitchen. It runs in your browser, with nothing to install.</p>
+      <div class="actions">
+        <a class="btn" href="#tour">Start the tour <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn ghost" href="https://aiims.group/contact/">Book a visit</a>
+      </div>
+      <div class="facts">
+        <div><b>2</b><span class="mono">Levels</span></div>
+        <div><b>15</b><span class="mono">Spaces to explore</span></div>
+        <div><b>6</b><span class="mono">Camera views</span></div>
+        <div><b>1.65&nbsp;m</b><span class="mono">Walk-mode eye height</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="tour" id="tour" aria-labelledby="tour-title">
+    <div class="wrap">
+      <div class="tour-head">
+        <div>
+          <h2 id="tour-title">The tour</h2>
+          <p>Click anywhere to jump there, drag to orbit and scroll to zoom.</p>
+        </div>
+        <a class="btn ghost" href="index.html" target="_blank" rel="noopener">Open full screen <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="frame">
+        <div class="poster mono">Loading the 3D office…</div>
+        <iframe id="viewer" src="index.html" title="AIIMS office 3D tour" allow="fullscreen; xr-spatial-tracking" loading="lazy"></iframe>
+      </div>
+      <div class="tour-foot mono">
+        <span>Rebuilt from the floor plans and site photos. Furniture is illustrative.</span>
+        <span>Keyboard: W A S D to walk</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="spaces" aria-labelledby="spaces-title">
+    <div class="wrap">
+      <div class="intro">
+        <h2 id="spaces-title">Jump to a space</h2>
+        <p>Pick a room and the tour takes you there at eye level. From there you can walk around or look in any direction.</p>
+      </div>
+
+      <div class="level">
+        <h3 class="mono">Ground floor · FFL 0.00</h3>
+        <div class="grid">
+          <button class="space" data-view="sp-lounge"><span><strong>Entry lounge</strong><small>Where every visit starts.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-walk"><span><strong>Entry walk-through</strong><small>Through the front door and inside.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-ware"><span><strong>Warehouse</strong><small>The big open ground-floor space.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-kynan"><span><strong>Kynan’s hoop</strong><small>Meet Kynan in the warehouse.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-window"><span><strong>Podcast window</strong><small>A look into the studio from the warehouse.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-studio"><span><strong>Podcast set</strong><small>Home of AIIMS Creator Hub.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-photo"><span><strong>Photo area</strong><small>Set up for product and portrait shoots.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-desks"><span><strong>Black desks</strong><small>Workstations in the storage wing.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+        </div>
+      </div>
+
+      <div class="level">
+        <h3 class="mono">Upper floor · FFL +4.45</h3>
+        <div class="grid">
+          <button class="space" data-view="sp-front"><span><strong>Front open area</strong><small>The open floor at the front of the building.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-common"><span><strong>Common area</strong><small>Shared space for the whole team.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-design"><span><strong>Design</strong><small>Where the creative team works.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-court"><span><strong>Courtyard</strong><small>Open air, upstairs.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-kitchen"><span><strong>Kitchen</strong><small>Coffee machine included.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-dining"><span><strong>Dining nook</strong><small>A seat by the kitchen.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-office"><span><strong>East open area</strong><small>Desks along the east side.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="try" aria-labelledby="try-title">
+    <div class="wrap">
+      <h2 id="try-title">Things to try</h2>
+      <div class="cards">
+        <article class="card">
+          <span class="mono">01 · Walk mode</span>
+          <h3>See it at eye level</h3>
+          <p>Switch to Walk and move through either floor with W A S D or the on-screen arrows. Click the floor to jump ahead.</p>
+          <button class="btn ghost" data-view="walk">Start walking</button>
+        </article>
+        <article class="card">
+          <span class="mono">02 · Kitchen</span>
+          <h3>Make a latte</h3>
+          <p>Click the coffee machine upstairs, choose a swan or a heart, then pour it yourself as the barista.</p>
+          <button class="btn ghost" data-view="sp-kitchen">Go to the kitchen</button>
+        </article>
+        <article class="card">
+          <span class="mono">03 · Warehouse</span>
+          <h3>Shoot some hoops</h3>
+          <p>Find Kynan in the warehouse and click him. He can bounce the ball or shoot it at the hoop.</p>
+          <button class="btn ghost" data-view="sp-kynan">Find Kynan</button>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="visit" aria-labelledby="visit-title">
+    <div class="wrap">
+      <div>
+        <h2 id="visit-title">Rather see it in person?</h2>
+        <p>Come and meet the team at 9/39 Gould St, Strathfield South NSW 2136.</p>
+      </div>
+      <div class="actions">
+        <a class="btn" href="https://aiims.group/contact/">Book a visit <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn ghost" href="tel:1300397603">1300 397 603</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="logo" href="https://aiims.group/" aria-label="AIIMS Group home"><svg viewBox="0 0 929 239" role="img" aria-label="AIIMS Group"><use href="#aiims-logo"/></svg></a>
+        <p style="margin:0;max-width:300px">A marketing powerhouse for people with a fierce conviction to grow.</p>
+      </div>
+      <div>
+        <h4 class="mono">Explore</h4>
+        <ul>
+          <li><a href="https://aiims.group/services/">Services</a></li>
+          <li><a href="https://aiims.group/aiims-creator-hub/">Creator Hub</a></li>
+          <li><a href="https://aiims.group/podcast-studio-hire-sydney/">Podcast Studio Sydney</a></li>
+          <li><a href="https://aiims.group/case-studies/">Case Studies</a></li>
+          <li><a href="https://aiims.group/about-aiims-group/">About Us</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="mono">Contact</h4>
+        <ul>
+          <li><a href="tel:1300397603">1300 397 603</a></li>
+          <li><a href="mailto:info@aiims.group">info@aiims.group</a></li>
+          <li>9/39 Gould St, Strathfield South NSW 2136 Australia</li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="mono">AIIMS App</h4>
+        <ul>
+          <li><a href="https://apps.apple.com/us/app/aiims-group/id6783587854">App Store</a></li>
+          <li><a href="https://play.google.com/store/apps/details?id=group.aiims.app">Google Play</a></li>
+          <li><a href="https://app.aiims.group/">Web App</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <span>© AIIMS™ Group <span id="yr">2026</span></span>
+      <a href="https://aiims.group/privacy-policy">Priv. policy</a>
+      <a href="https://aiims.group/modern-slavery-statement">Modern Slavery</a>
+      <a href="https://aiims.group/terms-and-conditions">T&amp;Cs</a>
+    </div>
+    <p class="ack">Cohesion. Inclusion. Respect. AIIMS is committed to cohesion and inclusion across our global team and the communities we serve. We honour Elders past and present worldwide, and respect people of all faiths, races, cultures and identities. Different people. One standard.</p>
+  </div>
+</footer>
+
+<script>
+// Room buttons scroll to the tour and tell the embedded viewer which space to open.
+(() => {
+  const frame = document.getElementById('viewer');
+  let ready = false, pending = null;
+  addEventListener('message', e => {
+    if (e.source !== frame.contentWindow || !e.data || !e.data.aiimsReady) return;
+    ready = true;
+    frame.previousElementSibling.hidden = true;
+    if (pending) { frame.contentWindow.postMessage({ aiimsView: pending }, '*'); pending = null; }
+  });
+  document.querySelectorAll('main [data-view]').forEach(b => b.addEventListener('click', () => {
+    const v = b.dataset.view;
+    document.getElementById('tour').scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+    frame.loading = 'eager';
+    if (ready) frame.contentWindow.postMessage({ aiimsView: v }, '*'); else pending = v;
+  }));
+  document.getElementById('yr').textContent = new Date().getFullYear();
+})();
+</script>
+</body>
+</html>
