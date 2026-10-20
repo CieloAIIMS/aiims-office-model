@@ -32,8 +32,6 @@ body{background:var(--bg);color:var(--ink);font-family:var(--f-body);overflow:hi
 #app{position:relative;height:100%;display:flex}
 #stage{position:relative;flex:1;min-width:0;height:100%}
 #stage canvas{display:block;width:100%;height:100%;touch-action:none;outline:none}
-aside{width:292px;flex:none;height:100%;overflow-y:auto;background:var(--panel);border-right:1px solid var(--line);
-  padding:22px 20px;display:flex;flex-direction:column;gap:22px;box-sizing:border-box;order:-1}
 .brand{display:flex;flex-direction:column;gap:6px}
 .brand h1{font-family:var(--f-display);font-weight:800;font-size:28px;letter-spacing:-.01em;margin:0;line-height:1}
 .brand h1 span{font-weight:500;color:var(--muted)}
@@ -71,21 +69,11 @@ aside{width:292px;flex:none;height:100%;overflow-y:auto;background:var(--panel);
 #pad button{background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;font:500 16px var(--f-body);cursor:pointer;touch-action:none}
 #floorchip{position:absolute;top:14px;left:14px;font:500 11px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;background:var(--ink);color:var(--bg);padding:6px 10px;border-radius:4px}
 @media (max-width:760px){
-  #app{flex-direction:column}
-  aside{order:1;width:100%;height:auto;max-height:44%;border-right:0;border-top:1px solid var(--line);padding:14px 16px;gap:14px}
-  .brand p{display:none}
-  .views{grid-template-columns:repeat(3,1fr)}
   #stage{flex:1;min-height:0}
   #hint{bottom:10px;font-size:11px}
   #pad{bottom:44px}
 }
 @media (prefers-reduced-motion:reduce){.tog span.sw,.tog span.sw::after{transition:none}}
-aside .spaces{display:flex;flex-direction:column;gap:4px}
-aside .spaces button{display:flex;justify-content:space-between;align-items:center;gap:8px;font:500 13px var(--f-body);color:var(--ink);background:var(--chip);border:1px solid transparent;border-radius:6px;padding:9px 11px;cursor:pointer;text-align:left}
-aside .spaces button small{font:400 10.5px var(--f-mono);color:var(--muted);letter-spacing:.04em;text-transform:uppercase}
-aside .spaces button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
-aside .spaces button[aria-pressed="true"] small{color:inherit;opacity:.75}
-aside .spaces button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
 #kmenu{position:absolute;z-index:5;min-width:220px;background:var(--panel);color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:4px;box-shadow:0 8px 24px rgba(0,0,0,.25)}
 #kmenu p{margin:2px 6px 6px;font:500 10.5px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
 #kmenu button{font:500 13px var(--f-body);text-align:left;background:var(--chip);color:var(--ink);border:0;border-radius:5px;padding:10px 12px;cursor:pointer}
@@ -118,6 +106,75 @@ aside .spaces button:focus-visible{outline:2px solid var(--accent);outline-offse
 #vr #vr-timer{position:absolute;right:16px;top:14px;font:500 20px var(--f-mono);font-variant-numeric:tabular-nums}
 #vr .vr-end div{display:flex;gap:8px;margin-top:12px}
 @media (max-width:760px){#vr .vr-card,#vr .vr-end{bottom:12px;padding:10px 14px}#vr h3{font-size:15px}#vr p{font-size:12px}}
+
+/* ---- Menu: button + overlay, styled after the aiims.group header menu ---- */
+:root{--m-orange:#F5412C;--m-black:#0E0E0E;--m-grey:#EFEFEF;--m-grey-50:rgba(239,239,239,.5);--m-line:rgba(239,239,239,.1);--m-line-strong:rgba(239,239,239,.28);--m-raised:#171717;
+  --m-sans:"Interphases","TT Interphases Pro","Archivo","Helvetica Neue",Arial,sans-serif;--m-mono:"InterphasesMono","TT Interphases Pro Mono","IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;--m-ease:cubic-bezier(.2,.8,.2,1)}
+.mbtn{position:absolute;top:12px;right:12px;z-index:7;display:inline-flex;height:40px;align-items:center;gap:8px;padding:0 12px;background:var(--m-black);color:var(--m-grey);
+  border:1px solid var(--m-line-strong);border-radius:4px;font:700 11px/1 var(--m-mono);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;
+  transition:background-color .3s,color .3s,border-color .3s,transform .3s}
+.mbtn:hover,.mbtn:focus-visible,.mbtn[aria-expanded="true"]{background:var(--m-orange);border-color:var(--m-orange);color:#fff}
+.mbtn:focus-visible{outline:2px solid var(--m-orange);outline-offset:2px}
+.burger{display:flex;flex-direction:column;gap:5px}
+.burger i{display:block;width:16px;height:1.5px;background:currentColor}
+.m{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);z-index:1001;background:var(--m-black);color:var(--m-grey);font-family:var(--m-sans);
+  display:flex;flex-direction:column;box-sizing:border-box;border-left:1px solid var(--m-line);
+  clip-path:inset(0 0 100% 0);visibility:hidden;transition:clip-path .32s var(--m-ease),visibility 0s linear .32s}
+.m.is-open{clip-path:inset(0);visibility:visible;transition:clip-path .32s var(--m-ease),visibility 0s}
+.m *{box-sizing:border-box}
+.m button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;padding:0}
+.m :focus-visible{outline:2px solid var(--m-orange);outline-offset:2px}
+.m__head{flex:0 0 auto;height:64px;display:flex;align-items:center;justify-content:space-between;padding:0 20px;border-bottom:1px solid var(--m-line)}
+.m__brand{margin:0;font:900 26px/1 var(--m-sans);letter-spacing:-.03em;text-transform:uppercase}
+.m__brand span{color:var(--m-grey-50);font-weight:600}
+.m .m__x{width:44px;height:40px;display:flex;align-items:center;justify-content:center;border:1px solid var(--m-line-strong);border-radius:4px;color:var(--m-orange);font:600 16px/1 var(--m-sans)}
+.m__tabs{flex:0 0 auto;display:flex;gap:20px;padding:0 20px;overflow-x:auto;border-bottom:1px solid var(--m-line);scrollbar-width:none}
+.m__tabs::-webkit-scrollbar{display:none}
+.m .m__tabs button{flex:0 0 auto;padding:14px 0 12px;border-bottom:2px solid transparent;font:600 13px/1 var(--m-sans);letter-spacing:.04em;text-transform:uppercase;color:var(--m-grey-50)}
+.m .m__tabs button[aria-selected="true"]{color:var(--m-grey);border-bottom-color:var(--m-orange)}
+.m .m__tabs button:hover{color:var(--m-grey)}
+.m__body{flex:1 1 0%;overflow-y:auto;overscroll-behavior:contain;padding:24px 20px calc(28px + env(safe-area-inset-bottom,0px))}
+.m__panel{display:flex;flex-direction:column;gap:18px}
+.m__kicker{margin:6px 0 0;font:700 11px/1 var(--m-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--m-grey-50)}
+.m__lede{margin:0;font:900 30px/1.02 var(--m-sans);letter-spacing:-.03em;text-transform:uppercase}
+/* spaces: directory list */
+.m .spaces{display:flex;flex-direction:column}
+.m .spaces button{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 0;border-bottom:1px solid var(--m-line);text-align:left;font:600 17px/1.15 var(--m-sans);transition:color .2s}
+.m .spaces button:first-child{border-top:1px solid var(--m-line)}
+.m .spaces button small{font:700 10px/1 var(--m-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--m-grey-50)}
+.m .spaces button:hover{color:var(--m-orange)}
+.m .spaces button[aria-pressed="true"]{color:var(--m-orange)}
+.m .spaces button[aria-pressed="true"] span::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--m-orange);margin:0 10px 2px 0;vertical-align:middle}
+/* views: outlined tiles */
+.m .views{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.m .views button{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--m-line-strong);border-radius:4px;text-align:left;font:600 15px/1 var(--m-sans);transition:background-color .3s,color .3s,border-color .3s}
+.m .views button small{font:700 10px/1 var(--m-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--m-grey-50)}
+.m .views button:hover{border-color:var(--m-grey)}
+.m .views button[aria-pressed="true"]{background:var(--m-orange);border-color:var(--m-orange);color:#fff}
+.m .views button[aria-pressed="true"] small{color:rgba(255,255,255,.8)}
+.m .seg{display:flex;gap:8px;background:none;padding:0}
+.m .seg button{flex:1;height:40px;border:1px solid var(--m-line-strong);border-radius:4px;font:700 11px/1 var(--m-mono);letter-spacing:.06em;text-transform:uppercase;box-shadow:none}
+.m .seg button[aria-pressed="true"]{background:var(--m-grey);border-color:var(--m-grey);color:var(--m-black)}
+/* layers: toggles */
+.m .tog{padding:14px 0;border-bottom:1px solid var(--m-line);font:600 15px var(--m-sans)}
+.m .tog:first-child{border-top:1px solid var(--m-line)}
+.m .tog em{font:700 10px var(--m-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--m-grey-50);margin:0 auto 0 10px}
+.m .tog span.sw{width:36px;height:20px;border-radius:10px;background:var(--m-line-strong)}
+.m .tog span.sw::after{top:3px;left:3px;width:14px;height:14px;background:var(--m-grey)}
+.m .tog input:checked+span.sw{background:var(--m-orange)}
+.m .tog input:checked+span.sw::after{transform:translateX(16px)}
+.m .tog input:focus-visible+span{outline:2px solid var(--m-orange);outline-offset:2px}
+/* about */
+.m .spec{font:400 13px var(--m-sans);gap:0}
+.m .spec dt,.m .spec dd{padding:11px 0;border-bottom:1px solid var(--m-line)}
+.m .spec dt{color:var(--m-grey-50)}
+.m .spec dd{font:700 12px var(--m-mono);color:var(--m-grey)}
+.m .note{font:400 13px/1.55 var(--m-sans);color:var(--m-grey-50)}
+.m .note b{color:var(--m-grey);font-weight:600}
+.m-scrim{position:fixed;inset:0;z-index:1000;background:rgba(0,0,0,.35);opacity:0;visibility:hidden;transition:opacity .32s var(--m-ease),visibility 0s linear .32s}
+.m-scrim.on{opacity:1;visibility:visible;transition:opacity .32s var(--m-ease),visibility 0s}
+@media (max-width:760px){.m{width:100%;border-left:0}.m-scrim{display:none}}
+@media (prefers-reduced-motion:reduce){.m,.m-scrim,.mbtn,.m *{transition:none!important}}
 #loading{position:absolute;inset:0;display:grid;place-items:center;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--bg)}
 </style>
 <div id="app">
@@ -150,16 +207,23 @@ aside .spaces button:focus-visible{outline:2px solid var(--accent);outline-offse
         <div><button type="button" id="vr-again">Make another</button><button type="button" id="vr-done">Done</button></div></div>
     </div>
     <div id="jumpmark" hidden></div>
+    <button id="menubtn" class="mbtn" type="button" aria-expanded="false" aria-controls="menu"><span class="burger" aria-hidden="true"><i></i><i></i></span>Menu</button>
     <div id="hint">Click anywhere to jump there · drag to orbit · scroll to zoom</div>
   </div>
-  <aside>
-    <div class="brand">
-      <h1>AIIMS <span>Office</span></h1>
-      <p>Two-storey office and warehouse, rebuilt in 3D from the floor plans and site photos.</p>
+  <aside id="menu" class="m" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+    <div class="m__head">
+      <p class="m__brand">AIIMS <span>Office</span></p>
+      <button class="m__x" type="button" aria-label="Close menu">&#x2715;</button>
     </div>
-    <div class="sec">
-      <h2>Spaces</h2>
-      <div class="spaces" role="group" aria-label="Spaces">
+    <div class="m__tabs" role="tablist" aria-label="Menu sections">
+      <button type="button" role="tab" id="mt-spaces" data-tab="spaces" aria-controls="mp-spaces" aria-selected="true">Spaces</button>
+      <button type="button" role="tab" id="mt-view" data-tab="view" aria-controls="mp-view" aria-selected="false" tabindex="-1">View</button>
+      <button type="button" role="tab" id="mt-layers" data-tab="layers" aria-controls="mp-layers" aria-selected="false" tabindex="-1">Layers</button>
+      <button type="button" role="tab" id="mt-about" data-tab="about" aria-controls="mp-about" aria-selected="false" tabindex="-1">About</button>
+    </div>
+    <div class="m__body">
+      <section class="m__panel" id="mp-spaces" role="tabpanel" aria-labelledby="mt-spaces">
+        <div class="spaces" role="group" aria-label="Spaces">
         <button id="sp-lounge" data-view="sp-lounge" aria-pressed="false"><span>Entry lounge</span><small>Ground</small></button>
         <button id="sp-walk" data-view="sp-walk" aria-pressed="false"><span>Entry · walk-through</span><small>Ground</small></button>
         <button id="sp-ware" data-view="sp-ware" aria-pressed="false"><span>Warehouse</span><small>Ground</small></button>
@@ -176,10 +240,9 @@ aside .spaces button:focus-visible{outline:2px solid var(--accent);outline-offse
         <button id="sp-dining" data-view="sp-dining" aria-pressed="false"><span>Kitchen · dining nook</span><small>Upper</small></button>
         <button id="sp-office" data-view="sp-office" aria-pressed="false"><span>East open area</span><small>Upper</small></button>
       </div>
-    </div>
-    <div class="sec">
-      <h2>View</h2>
-      <div class="views" role="group" aria-label="View">
+      </section>
+      <section class="m__panel" id="mp-view" role="tabpanel" aria-labelledby="mt-view" hidden>
+        <div class="views" role="group" aria-label="View">
         <button id="v-ext" data-view="ext" aria-pressed="true">Exterior<small>Street side</small></button>
         <button id="v-gf" data-view="gf" aria-pressed="false">Ground<small>FFL 0.00</small></button>
         <button id="v-uf" data-view="uf" aria-pressed="false">Upper<small>FFL +4.45</small></button>
@@ -187,24 +250,24 @@ aside .spaces button:focus-visible{outline:2px solid var(--accent);outline-offse
         <button id="v-walk" data-view="walk" aria-pressed="false">Walk<small>Eye 1.65 m</small></button>
         <button id="v-top" data-view="top" aria-pressed="false">Plan<small>Top down</small></button>
       </div>
-      <div class="seg" id="walkfloor" role="group" aria-label="Walk floor" hidden>
+        <div class="seg" id="walkfloor" role="group" aria-label="Walk floor" hidden>
         <button id="wf-gf" data-f="GF" aria-pressed="true">Walk ground</button>
         <button id="wf-uf" data-f="UF" aria-pressed="false">Walk upper</button>
       </div>
-    </div>
-    <div class="sec">
-      <h2>Layers</h2>
-      <label class="tog">Office fit-out<em>illustrative</em><input type="checkbox" id="l-fit" checked><span class="sw"></span></label>
+      </section>
+      <section class="m__panel" id="mp-layers" role="tabpanel" aria-labelledby="mt-layers" hidden>
+        <label class="tog">Office fit-out<em>illustrative</em><input type="checkbox" id="l-fit" checked><span class="sw"></span></label>
       <label class="tog">Room labels<input type="checkbox" id="l-lbl" checked><span class="sw"></span></label>
       <label class="tog">Stair<em>provisional</em><input type="checkbox" id="l-stair" checked><span class="sw"></span></label>
       <label class="tog">Sunshade fins<input type="checkbox" id="l-fac" checked><span class="sw"></span></label>
       <label class="tog">Curtains<input type="checkbox" id="l-cur" checked><span class="sw"></span></label>
       <label class="tog">Roof<em>provisional</em><input type="checkbox" id="l-roof" checked><span class="sw"></span></label>
       <label class="tog">Realistic lighting<em>AO + glow</em><input type="checkbox" id="l-hq" checked><span class="sw"></span></label>
-    </div>
-    <div class="sec">
-      <h2>Key dimensions</h2>
-      <dl class="spec">
+      </section>
+      <section class="m__panel" id="mp-about" role="tabpanel" aria-labelledby="mt-about" hidden>
+        <p class="m__lede">Two-storey office and warehouse, rebuilt in 3D from the floor plans and site photos.</p>
+        <h2 class="m__kicker">Key dimensions</h2>
+        <dl class="spec">
         <dt>Footprint</dt><dd>16.84 × 25.86 m</dd>
         <dt>Warehouse</dt><dd>13.0 × 5.5 m</dd>
         <dt>Warehouse height</dt><dd>4.20 m</dd>
@@ -213,8 +276,9 @@ aside .spaces button:focus-visible{outline:2px solid var(--accent);outline-offse
         <dt>Upper floor level</dt><dd>+4.45 m est.</dd>
         <dt>Workstations shown</dt><dd>38</dd>
       </dl>
+        <p class="note"><b>How to read this.</b> Walls, glazing, doors, joinery and amenities come from the calibrated Review 01 reconstruction. The entry lounge, courtyard, warehouse, storage studio, kitchen, front open area, design room and east open area are finished from site photos. The street frontage, sign tower, neighbouring warehouse, parking canopy and the AIIMS Jimny follow the street photo. Other desks, tables and plants are an illustrative fit-out. The roof, upper floor level and stair are estimates.</p>
+      </section>
     </div>
-    <p class="note"><b>How to read this.</b> Walls, glazing, doors, joinery and amenities come from the calibrated Review 01 reconstruction. The entry lounge, courtyard, warehouse, storage studio, kitchen, front open area, design room and east open area are finished from site photos. The street frontage, sign tower, neighbouring warehouse, parking canopy and the AIIMS Jimny follow the street photo. Other desks, tables and plants are an illustrative fit-out. The roof, upper floor level and stair are estimates.</p>
   </aside>
 </div>
 
@@ -1624,7 +1688,7 @@ const yawToward = (dx, dy) => Math.atan2(-dx, dy);
   };
   // floors: dark large-format tile everywhere, flecked carpet zone under the desks
   patch(G, 3.9, 1.62, 12.6, 10.05, z0 + 0.006, F.tile); patch(G, 0.2, 0.25, 3.85, 6.0, z0 + 0.006, F.tile);
-  patch(G, 0.2, 0.25, 11.6, 5.9, z0 + 0.012, F.carpet);
+  patch(G, 0.2, 0.25, 9.2, 5.9, z0 + 0.012, F.carpet); patch(G, 9.2, 1.75, 11.6, 5.9, z0 + 0.012, F.carpet);   // facade steps back east of x 9.5
   bx(G, 0.2, 5.88, z0 + 0.006, 11.6, 5.92, z0 + 0.016, M.steel_black, { r: 0 }); bx(G, 11.58, 0.25, z0 + 0.006, 11.62, 5.92, z0 + 0.016, M.steel_black, { r: 0 });
   // black vertical-slat wall behind the desks (bathroom block south face) and black TV wall (bathroom block east face)
   bx(G, 0.2, 6.0, z0, 3.86, 6.04, zc, F.black, { r: 0 });
@@ -1674,7 +1738,7 @@ const yawToward = (dx, dy) => Math.atan2(-dx, dy);
       bx(G, edge - side * 0.3 - 0.07, mid - 0.22, z0 + 0.75, edge - side * 0.3 + 0.07, mid + 0.22, z0 + 0.765, M.table_black, { r: 0.003 });
       const px = side < 0 ? xA - 0.0 : xB - 0.42; bx(G, px + (side < 0 ? 0.02 : 0), dy1 - 0.62, z0, px + (side < 0 ? 0.42 : 0.4), dy1 - 0.04, z0 + 0.62, F.black, { r: 0.01 });
       place(mc, G, edge + side * 0.45, mid - 0.15, z0, yawToward(-side, 0)); } };
-  cluster(2.0, 0.85, 3); cluster(5.35, 0.85, 3); cluster(8.7, 0.85, 3);
+  cluster(2.0, 0.85, 3); cluster(5.35, 0.85, 3); cluster(8.7, 2.25, 2);
 
   // ---- lounge against the courtyard glazing: four pale grey armchairs on black steel tube frames, round white table, big olive planter
   const armchair = () => { const g = new THREE.Group(), add = (geo, mat) => { const m = new THREE.Mesh(geo, mat); m.castShadow = m.receiveShadow = true; g.add(m); return m; };
@@ -1984,6 +2048,7 @@ const LBL = DATA.labels.map(l => { const el = document.createElement('div'); el.
 const state = { view: 'ext', walkFloor: 'GF', fit: true, lbl: true, stair: true, fac: true, roof: true, cur: true, hq: true, explode: 0, explodeTarget: 0 };
 if (window.__noHQ) { state.hq = false; document.getElementById('l-hq').checked = false; }
 const controls = new OrbitControls(camera, renderer.domElement);
+window.__cam = { camera, controls };
 controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI * 0.495; controls.minDistance = 2; controls.maxDistance = 120;
 const PRESETS = {
   ext: { pos: [5.5, 2.8, 37], tgt: [12.5, 3.8, -2], hint: 'Click anywhere to jump there · drag to orbit · scroll to zoom', chip: 'Exterior' },
@@ -2026,7 +2091,7 @@ cvs.addEventListener('pointerdown', e => { if (!isWalk()) return; dragging = tru
 cvs.addEventListener('pointermove', e => { if (!dragging) return; walk.yaw -= (e.clientX - lx) * 0.004; walk.pitch = Math.max(-1.2, Math.min(1.2, walk.pitch - (e.clientY - ly) * 0.004)); lx = e.clientX; ly = e.clientY; });
 cvs.addEventListener('pointerup', () => dragging = false);
 cvs.addEventListener('wheel', e => { if (!isWalk()) return; e.preventDefault(); walk.imp = (walk.imp || 0) - Math.sign(e.deltaY) * 0.6; }, { passive: false });
-addEventListener('keydown', e => { if (isWalk() && !window.__baristaActive) { walk.keys[e.key.toLowerCase()] = true; if (e.key.startsWith('Arrow')) e.preventDefault(); } });
+addEventListener('keydown', e => { if (isWalk() && !window.__baristaActive && !window.__menuOpen) { walk.keys[e.key.toLowerCase()] = true; if (e.key.startsWith('Arrow')) e.preventDefault(); } });
 addEventListener('keyup', e => { walk.keys[e.key.toLowerCase()] = false; });
 document.querySelectorAll('#pad button').forEach(b => { const k = b.dataset.k;
   b.addEventListener('pointerdown', e => { e.preventDefault(); walk.keys['pad_' + k] = true; });
@@ -2603,6 +2668,56 @@ window.__exportGLB = () => new Promise((res, rej) => {
     hemi.intensity = walking ? 0.22 : 0.35;
     assignPool(now); updateProbe(now);
   };
+}
+
+// ================================================================== MENU (hamburger + overlay)
+{
+  const btn = document.getElementById('menubtn'), menu = document.getElementById('menu'), closeBtn = menu.querySelector('.m__x');
+  const scrim = document.createElement('div'); scrim.className = 'm-scrim'; document.body.appendChild(scrim);
+  const tabs = [...menu.querySelectorAll('[role="tab"]')];
+  const isOpen = () => menu.classList.contains('is-open');
+  const focusables = () => [...menu.querySelectorAll('button, input, [tabindex]:not([tabindex="-1"])')].filter(e => !e.closest('[hidden]') && e.offsetParent !== null);
+  function open() {
+    window.__menuOpen = true; for (const k in walk.keys) walk.keys[k] = false;
+    menu.classList.add('is-open'); scrim.classList.add('on'); menu.setAttribute('aria-hidden', 'false'); btn.setAttribute('aria-expanded', 'true');
+    setTimeout(() => closeBtn.focus(), 30);
+  }
+  function close(returnFocus = true) {
+    if (!isOpen()) return;
+    window.__menuOpen = false;
+    menu.classList.remove('is-open'); scrim.classList.remove('on'); menu.setAttribute('aria-hidden', 'true'); btn.setAttribute('aria-expanded', 'false');
+    if (returnFocus) btn.focus({ preventScroll: true });
+  }
+  function selectTab(t, focus) {
+    tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
+    if (focus) t.focus();
+    menu.querySelector('.m__body').scrollTop = 0;
+  }
+  btn.addEventListener('click', () => (isOpen() ? close() : open()));
+  closeBtn.addEventListener('click', () => close());
+  scrim.addEventListener('click', () => close());
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => selectTab(t));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { e.preventDefault(); selectTab(tabs[(i + d + tabs.length) % tabs.length], true); }
+    });
+  });
+  // picking a place to go takes you straight there
+  menu.querySelectorAll('[data-view], #walkfloor button').forEach(b => b.addEventListener('click', () => setTimeout(() => close(false), 120)));
+  document.addEventListener('keydown', e => {
+    if (!isOpen()) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
+    if (e.key === 'Tab') {
+      const f = focusables(); if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }, true);
+  // hide the menu button during the first-person barista mode (its Exit button sits top-right)
+  const vr = document.getElementById('vr');
+  if (vr) new MutationObserver(() => { btn.hidden = !vr.hidden; if (!vr.hidden) close(false); }).observe(vr, { attributes: true, attributeFilter: ['hidden'] });
 }
 
 </script>
