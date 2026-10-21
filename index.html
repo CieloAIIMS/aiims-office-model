@@ -557,10 +557,25 @@ function addMesh(geo, mat, floor, layer, opts = {}) {
   if (layers[layer]) layers[layer].push(m);
   return m;
 }
+// plan boxes [x0, x1, y0, y1, zMax]: internal-wall triangles entirely inside one are dropped and the wall is rebuilt by hand (see below)
+const ARCH_CUTS = [
+  [11.53, 15.06, 10.395, 10.515, 4.21],   // GF stair-side wall: the corridor end becomes a low panel following the stair (entry photo)
+  [5.2, 16.54, 11.965, 12.075, 4.21],     // GF mid spine east of the store door: rebuilt with the doorway through to the Creator Hub corridor
+];
+function cutArch(geo) {
+  const p = geo.attributes.position.array, keep = [];
+  for (let t = 0; t < p.length; t += 9) {
+    const inside = ARCH_CUTS.some(([x0, x1, y0, y1, zm]) => { for (let k = 0; k < 9; k += 3) { const x = p[t + k], y = -p[t + k + 2], z = p[t + k + 1];
+      if (x < x0 || x > x1 || y < y0 || y > y1 || z > zm) return false; } return true; });
+    if (!inside) for (let k = 0; k < 9; k++) keep.push(p[t + k]);
+  }
+  const q = new THREE.BufferGeometry(); q.setAttribute('position', new THREE.Float32BufferAttribute(keep, 3)); return q;
+}
 for (const g of DATA.groups) {
   const geo = new THREE.BufferGeometry();
   geo.setAttribute('position', new THREE.Float32BufferAttribute(g.v, 3)); geo.setIndex(g.i);
-  const flat = geo.ni(); flat.computeVertexNormals(); projectUV(flat);
+  let flat = geo.ni(); if (g.layer === 'arch' && g.mat === 'internal') flat = cutArch(flat);
+  flat.computeVertexNormals(); projectUV(flat);
   let key = g.mat; if (key === 'slab') key = g.floor === 'UF' ? 'oak_floor' : 'concrete_floor'; if (key === 'glass_door') key = 'glass';
   const home = g.layer === 'stair' ? 'GF' : g.floor;
   if (g.mat === 'slab') {            // split slabs: walkable top gets the floor finish, edges and soffit get facade / ceiling finishes
@@ -575,6 +590,11 @@ for (const g of DATA.groups) {
   const mesh = addMesh(flat, M[key] || M.internal, home, g.layer);
   mesh.name = `${g.floor} ${g.layer} ${g.mat}`;
 }
+// walls rebuilt from ARCH_CUTS: stair-side wall east of the corridor (full height), mid spine with a doorway at x 10.72-11.52
+bx(floorGroups.GF, 12.73, 10.40, 0, 15.05, 10.51, 4.2, M.internal, { r: 0 });
+bx(floorGroups.GF, 5.23, 11.97, 0, 10.72, 12.07, 4.2, M.internal, { r: 0 });
+bx(floorGroups.GF, 11.52, 11.97, 0, 16.53, 12.07, 4.2, M.internal, { r: 0 });
+bx(floorGroups.GF, 10.72, 11.97, 2.1, 11.52, 12.07, 4.2, M.internal, { r: 0 });
 
 // ------------------------------------------------------------------ fit-out primitives (rounded, textured, merged by material)
 function leafCluster(cx, cy, cz, r, out, opt = {}) {
@@ -1473,19 +1493,44 @@ const yawToward = (dx, dy) => Math.atan2(-dx, dy);
   // dark finishes over the remaining white wall faces along the walk-through
   bx(G, 9.93, 7.08, 0, 10.66, 7.2, H, W.black, { r: 0 });
   bx(G, 12.695, 8.52, 0, 12.73, 10.4, H, M.batten, { r: 0 });
-  bx(G, 11.5, 10.36, 0, 12.73, 10.395, H, W.black, { r: 0 });
   bx(G, 10.62, 10.25, 0, 10.66, 11.93, H, W.black, { r: 0 });
-  // rear wall: black tile, wayfinding sign, exit sign, door to the back
-  bx(G, 10.62, 11.93, 0, 12.73, 11.96, H, W.tiles, { r: 0 });
-  bx(G, 10.75, 11.9, 0, 11.6, 11.93, 2.1, M.white, { r: 0 }); bx(G, 10.8, 11.89, 0.02, 11.55, 11.9, 2.06, M.tv, { r: 0 });
+  // stair balustrade at the corridor end (entry-stairs photo): half-height black panel whose top climbs with the stair to the right,
+  // LED strip along the top edge and down the open end, brushed-steel handrail above
+  { const X0 = 11.54, X1 = 12.73, Y0 = 10.40, Y1 = 10.51, ZL = 1.0, SL = 0.86, ZR = ZL + (X1 - X0) * SL, ang = Math.atan(SL);
+    const sh = new THREE.Shape([new THREE.Vector2(X0, 0), new THREE.Vector2(X1, 0), new THREE.Vector2(X1, ZR), new THREE.Vector2(X0, ZL)]);
+    const pg = new THREE.ExtrudeGeometry(sh, { depth: Y1 - Y0, bevelEnabled: false }); pg.translate(0, 0, -Y1); projectUV(pg); put(G, pg, W.black);
+    const slope = (len, y, dz, w, mat) => { const g2 = new THREE.BoxGeometry(len, w, 0.012); g2.rotateZ(ang);
+      const a = P(X0, y, ZL + dz), b = P(X1, y, ZR + dz); g2.translate((a.x + b.x) / 2, (a.y + b.y) / 2, a.z); return put(G, g2, mat, { cast: false }); };
+    const run = Math.hypot(X1 - X0, ZR - ZL);
+    slope(run, Y0 - 0.006, -0.035, 0.022, M.led);                                                  // top-edge LED on the corridor face
+    bx(G, X0 + 0.012, Y0 - 0.012, 0.02, X0 + 0.034, Y0, ZL - 0.05, M.led, { r: 0, cast: false });   // down the open end
+    const a = P(X0 + 0.06, (Y0 + Y1) / 2, ZL + 0.13), b = P(X1, (Y0 + Y1) / 2, ZR + 0.13);
+    const hr = new THREE.CylinderGeometry(0.022, 0.022, a.distanceTo(b), 14); const m = new THREE.Mesh(hr, M.metal); m.position.copy(a).add(b).multiplyScalar(0.5);
+    m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize()); m.castShadow = true; G.add(m);
+    const ret = new THREE.CylinderGeometry(0.022, 0.022, 0.13, 14); ret.translate(a.x, a.y - 0.065, a.z); put(G, ret, M.metal);   // end return onto the panel
+    for (const t of [0.3, 0.8]) { const x = X0 + 0.06 + (X1 - X0 - 0.06) * t, z = ZL + (x - X0) * SL;
+      const br = new THREE.CylinderGeometry(0.01, 0.01, 0.13, 8); br.translate(x, z + 0.065, -(Y0 + Y1) / 2); put(G, br, M.metal); } }
+  // rear wall: black tile with the doorway through to the Creator Hub corridor (black frame), wayfinding sign beside it
+  bx(G, 10.62, 11.93, 0, 10.72, 11.96, H, W.tiles, { r: 0 }); bx(G, 11.52, 11.93, 0, 12.73, 11.96, H, W.tiles, { r: 0 }); bx(G, 10.72, 11.93, 2.1, 11.52, 11.96, H, W.tiles, { r: 0 });
+  bx(G, 10.67, 11.9, 0, 10.72, 12.07, 2.15, M.steel_black, { r: 0 }); bx(G, 11.52, 11.9, 0, 11.57, 12.07, 2.15, M.steel_black, { r: 0 });
+  bx(G, 10.67, 11.9, 2.1, 11.57, 12.07, 2.15, M.steel_black, { r: 0 });
   { const s = new THREE.PlaneGeometry(0.8, 0.56); s.translate(12.2, 1.95, -11.915); put(G, s, wayfind, { cast: false }); }
-  bx(G, 11.02, 11.88, 2.2, 11.32, 11.9, 2.32, exitS, { r: 0, cast: false });
+  bx(G, 12.70, 10.51, 0, 12.73, 11.93, H, W.tiles, { r: 0 });   // tile return on the stair side, above the balustrade panel
+  // corridor behind the door: tiled floor, white walls, framed print on the left, exit sign over the Creator Hub door at the far end
+  patch(G, 10.72, 11.96, 11.52, 12.07, 0.004, M.tile); patch(G, 10.13, 12.07, 11.56, 15.37, 0.004, M.tile);
+  bx(G, 10.13, 12.07, 0, 10.15, 15.37, 2.9, M.white, { r: 0 }); bx(G, 11.54, 12.07, 0, 11.56, 15.37, 2.9, M.white, { r: 0 });
+  bx(G, 10.13, 12.07, 2.9, 11.56, 15.37, 2.92, M.white, { r: 0, layer: 'ceiling', cast: false });
+  { const art = signTex(300, 400, (ctx, w, h) => { ctx.fillStyle = '#efeeea'; ctx.fillRect(0, 0, w, h); ctx.fillStyle = '#16171a'; ctx.fillRect(30, 40, w - 60, h - 80);
+      ctx.fillStyle = '#F5412C'; ctx.fillRect(60, 250, 120, 12); ctx.fillStyle = '#efeeea'; ctx.font = '800 34px Archivo, Arial, sans-serif'; ctx.fillText('FEARLESS', 58, 220); ctx.fillText('TOGETHER', 58, 190); });
+    bx(G, 10.15, 12.5, 1.05, 10.18, 13.22, 2.0, M.tv, { r: 0.004 });
+    const p = new THREE.PlaneGeometry(0.66, 0.89); p.rotateY(Math.PI / 2); p.translate(10.185, 1.525, -12.86); put(G, p, art, { cast: false }); }
+  bx(G, 10.6, 15.28, 2.25, 10.92, 15.3, 2.37, exitS, { r: 0, cast: false });
+  { const l = new THREE.PointLight(0xfff4e6, 4, 5, 2); l.position.copy(P(10.85, 13.7, 2.7)); G.add(l); layers.ceiling.push(l); }
   // stair side: LED-lit handrail climbing to the right
   { const a = P(12.8, 10.54, 0.95), b = P(15.0, 10.54, 0.95 + 11 * 0.171);
     const hr = new THREE.CylinderGeometry(0.02, 0.02, a.distanceTo(b), 12); const m = new THREE.Mesh(hr, M.metal); m.position.copy(a).add(b).multiplyScalar(0.5);
     m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), b.clone().sub(a).normalize()); m.castShadow = true; G.add(m);
-    const led = new THREE.BoxGeometry(0.012, a.distanceTo(b), 0.02); const l = new THREE.Mesh(led, M.led); l.position.copy(m.position).add(new THREE.Vector3(0, -0.04, 0)); l.quaternion.copy(m.quaternion); G.add(l);
-    bx(G, 12.73, 10.5, 0, 12.76, 10.58, 0.95, M.led, { r: 0, cast: false }); }
+    const led = new THREE.BoxGeometry(0.012, a.distanceTo(b), 0.02); const l = new THREE.Mesh(led, M.led); l.position.copy(m.position).add(new THREE.Vector3(0, -0.04, 0)); l.quaternion.copy(m.quaternion); G.add(l); }
   // black ceiling over the corridor with a track of spotlights along the left
   bx(G, 9.97, 8.52, H - 0.01, 12.73, 11.96, H, M.black_ceiling, { r: 0, layer: 'ceiling', cast: false });
   bx(G, 10.93, 2.0, H - 0.07, 10.97, 11.6, H - 0.02, M.steel_black, { r: 0, layer: 'ceiling', cast: false });
