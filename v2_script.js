@@ -1227,7 +1227,7 @@ const yawToward = (dx, dy) => Math.atan2(-dx, dy);
   bx(G, 10.67, 11.9, 0, 10.72, 12.07, 2.15, M.steel_black, { r: 0 }); bx(G, 11.52, 11.9, 0, 11.57, 12.07, 2.15, M.steel_black, { r: 0 });
   bx(G, 10.67, 11.9, 2.1, 11.57, 12.07, 2.15, M.steel_black, { r: 0 });
   { const s = new THREE.PlaneGeometry(0.8, 0.56); s.translate(12.2, 1.95, -11.915); put(G, s, wayfind, { cast: false }); }
-  bx(G, 12.70, 10.51, 0, 12.73, 11.93, H, W.tiles, { r: 0 });   // tile return on the stair side, above the balustrade panel
+  bx(G, 12.70, 10.51, 2.4, 12.73, 11.93, H, W.tiles, { r: 0 });   // tile header over the foot of the stair, above the balustrade panel
   // corridor behind the door: tiled floor, white walls, framed print on the left, exit sign over the Creator Hub door at the far end
   patch(G, 10.72, 11.96, 11.52, 12.07, 0.004, M.tile); patch(G, 10.13, 12.07, 11.56, 15.37, 0.004, M.tile);
   bx(G, 10.13, 12.07, 0, 10.15, 15.37, 2.9, M.white, { r: 0 }); bx(G, 11.54, 12.07, 0, 11.56, 15.37, 2.9, M.white, { r: 0 });
@@ -1841,7 +1841,28 @@ const WALK_START = { GF: { p: [11.9, 1.0], yaw: 0, pitch: -0.05, eye: 1.65 }, UF
 function enterWalk(key) {
   const s = WALK_START[key], fl = s.f || 'GF'; state.walkFloor = fl;
   walk.pos.set(s.p[0], (fl === 'UF' ? UFZ : 0) + s.eye, -s.p[1]); walk.yaw = s.yaw; walk.pitch = s.pitch;
+  walk.ground = fl === 'UF' ? UFZ : 0; walk.eye = s.eye;
   controls.enabled = false; tween = null;
+}
+// walkable stair (provisional stair from the data): lower flight climbs east from behind the entry panel, half landing,
+// upper flight climbs west to the upper floor. Plan boxes [x0, x1, y0, y1].
+const STAIR = { lo: [12.75, 15.35, 10.51, 11.99], land: [15.35, 16.53, 8.61, 11.99], up: [12.75, 15.35, 8.61, 10.4], zLand: 2.23 };
+const inBox = (b, x, y) => x >= b[0] && x <= b[1] && y >= b[2] && y <= b[3];
+function stairZ(x, y) {           // walking surface height on the stair at plan (x, y), or null when off it
+  if (inBox(STAIR.lo, x, y)) return Math.max(0, (x - 12.75) / 2.6 * STAIR.zLand);
+  if (inBox(STAIR.land, x, y)) return STAIR.zLand;
+  if (inBox(STAIR.up, x, y)) return STAIR.zLand + Math.max(0, 15.35 - x) / 2.6 * (UFZ - STAIR.zLand);
+  return null;
+}
+function groundAt(x, y, cur) {    // follow the stair only when it is within a step of where we stand; otherwise stay on the current floor
+  const s = stairZ(x, y);
+  if (s !== null && Math.abs(s - cur) < 0.6) return s;
+  return cur > 3.0 ? UFZ : 0;
+}
+function syncWalkFloor() {        // floor chip, labels and floor buttons follow the level we are walking on
+  const fl = walk.ground > 3.0 ? 'UF' : 'GF'; if (fl === state.walkFloor) return;   // the half landing still counts as ground
+  state.walkFloor = fl; chip.textContent = fl === 'GF' ? 'Walk · Ground' : 'Walk · Upper';
+  document.querySelectorAll('#walkfloor button').forEach(x => x.setAttribute('aria-pressed', String(x.dataset.f === fl)));
 }
 let dragging = false, lx = 0, ly = 0;
 const cvs = renderer.domElement;
@@ -1908,6 +1929,11 @@ function frame(now) {
     const imp = walk.imp || 0; walk.imp = imp * 0.85; const f = fwd * sp + imp * dt * 4;
     walk.pos.x += -Math.sin(walk.yaw) * f + Math.cos(walk.yaw) * str * sp; walk.pos.z += -Math.cos(walk.yaw) * f - Math.sin(walk.yaw) * str * sp;
     walk.pos.x = Math.max(-3, Math.min(31, walk.pos.x)); walk.pos.z = Math.max(-25.4, Math.min(12, walk.pos.z));
+    if (!walk.hopping) {           // stand on the stair / floor under us
+      if (walk.ground === undefined) { walk.ground = walk.pos.y > UFZ + 0.5 ? UFZ : 0; walk.eye = walk.pos.y - walk.ground; }
+      walk.ground = groundAt(walk.pos.x, -walk.pos.z, walk.ground);
+      walk.pos.y += (walk.ground + walk.eye - walk.pos.y) * Math.min(1, dt * 12); syncWalkFloor();
+    }
     camera.position.copy(walk.pos);
     tmp.set(-Math.sin(walk.yaw) * Math.cos(walk.pitch), Math.sin(walk.pitch), -Math.cos(walk.yaw) * Math.cos(walk.pitch)).add(walk.pos); camera.lookAt(tmp);
     camera.fov = 60;
@@ -1943,7 +1969,9 @@ if (location.hash) openView(decodeURIComponent(location.hash.slice(1)));
 if (parent !== window) parent.postMessage({ aiimsReady: true }, '*');
 window.__setView = setView;
 window.__renderOnce = (n = 1) => { if (tween) { camera.position.copy(tween.to.p); controls.target.copy(tween.to.t); tween = null; } for (let k = 0; k < n; k++) { state.explode = state.explodeTarget; frame(performance.now()); } };
-window.__pose = (x, y, z, yaw, pitch) => { walk.pos.set(x, z, -y); walk.yaw = yaw; walk.pitch = pitch; };
+window.__walkState = () => ({ x: walk.pos.x, y: -walk.pos.z, z: walk.pos.y, ground: walk.ground, floor: state.walkFloor, yaw: walk.yaw, keys: Object.keys(walk.keys).filter(k => walk.keys[k]) });
+window.__pose = (x, y, z, yaw, pitch) => { walk.pos.set(x, z, -y); walk.yaw = yaw; walk.pitch = pitch;
+  const s = stairZ(x, y); walk.ground = s !== null && z - s < 2.2 && z - s > 0.5 ? s : z > UFZ + 0.5 ? UFZ : 0; walk.eye = z - walk.ground; };
 
 
 // ---- left-click anywhere to jump there (enters walk view at that spot)
@@ -1959,9 +1987,10 @@ window.__pose = (x, y, z, yaw, pitch) => { walk.pos.set(x, z, -y); walk.yaw = ya
     const h = hits[0], n = h.face ? h.face.normal.clone().transformDirection(h.object.matrixWorld) : new THREE.Vector3(0, 1, 0);
     const p = h.point.clone();
     if (n.y < 0.6) p.addScaledVector(ray.ray.direction, -0.45);          // clicked a wall or object: stop just in front of it
-    const upper = p.y > UFZ - 0.3 && floorGroups.UF.visible && state.explode < 0.5;
+    const hp = h.point, hz = stairZ(hp.x, -hp.z), onStair = state.explode < 0.5 && hz !== null && Math.abs(hz - hp.y) < 0.45;   // clicked a step (tread or riser)
+    const upper = (p.y > UFZ - 0.3 || (onStair && p.y > UFZ / 2)) && floorGroups.UF.visible && state.explode < 0.5;
     const floorY = upper ? UFZ : 0;
-    if (p.y > floorY + 2.2 && !(n.y > 0.6)) return;                        // ignore clicks high on walls/ceilings
+    if (!onStair && p.y > floorY + 2.2 && !(n.y > 0.6)) return;            // ignore clicks high on walls/ceilings
     const target = new THREE.Vector3(p.x, floorY + 1.6, p.z);
     const fl = upper ? 'UF' : 'GF';
     const wasWalk = isWalk();
@@ -1969,14 +1998,18 @@ window.__pose = (x, y, z, yaw, pitch) => { walk.pos.set(x, z, -y); walk.yaw = ya
     else if (fl !== state.walkFloor) { state.walkFloor = fl; }
     if (wasWalk) { const d = new THREE.Vector3(target.x - walk.pos.x, 0, target.z - walk.pos.z), L = d.length(), MAX = 2.5;
       if (L > MAX) target.set(walk.pos.x + d.x / L * MAX, target.y, walk.pos.z + d.z / L * MAX); }
-    hop = { from: walk.pos.clone(), to: target, t0: performance.now(), dur: matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 450 };
+    const sz = stairZ(target.x, -target.z), gz = onStair && sz !== null ? sz : floorY;   // land on the step under the (possibly shortened) target
+    target.y = gz + 1.6;
+    walk.hopping = true;
+    hop = { from: walk.pos.clone(), to: target, ground: gz, t0: performance.now(), dur: matchMedia('(prefers-reduced-motion: reduce)').matches ? 1 : 450 };
     chip.textContent = fl === 'GF' ? 'Walk · Ground' : 'Walk · Upper';
     const mk = document.getElementById('jumpmark'); mk.hidden = false; mk.style.left = (e.clientX - rc.left) + 'px'; mk.style.top = (e.clientY - rc.top) + 'px';
     mk.classList.remove('on'); void mk.offsetWidth; mk.classList.add('on'); setTimeout(() => mk.hidden = true, 600);
   };
   function isShown(o) { for (let q = o; q; q = q.parent) if (!q.visible) return false; return true; }
   window.__hopTick = (now) => { if (!hop) return; const k = Math.min(1, (now - hop.t0) / hop.dur), e2 = 1 - Math.pow(1 - k, 3);
-    walk.pos.lerpVectors(hop.from, hop.to, e2); walk.pos.y += Math.sin(k * Math.PI) * 0.08; if (k >= 1) hop = null; };
+    walk.pos.lerpVectors(hop.from, hop.to, e2); walk.pos.y += Math.sin(k * Math.PI) * 0.08;
+    if (k >= 1) { walk.ground = hop.ground; walk.eye = 1.6; walk.hopping = false; hop = null; } };
 }
 
 // ================================================================== BARISTA MODE: click the espresso machine, pick latte art, make a coffee in first person
