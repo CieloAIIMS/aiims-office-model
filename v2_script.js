@@ -1399,7 +1399,7 @@ const yawToward = (dx, dy) => Math.atan2(-dx, dy);
   };
   // floors: dark large-format tile everywhere, flecked carpet zone under the desks
   patch(G, 3.9, 1.62, 12.6, 10.05, z0 + 0.006, F.tile); patch(G, 0.2, 0.25, 3.85, 6.0, z0 + 0.006, F.tile);
-  patch(G, 0.2, 0.25, 11.6, 5.9, z0 + 0.012, F.carpet);
+  patch(G, 0.2, 0.25, 9.2, 5.9, z0 + 0.012, F.carpet); patch(G, 9.2, 1.75, 11.6, 5.9, z0 + 0.012, F.carpet);   // facade steps back east of x 9.5
   bx(G, 0.2, 5.88, z0 + 0.006, 11.6, 5.92, z0 + 0.016, M.steel_black, { r: 0 }); bx(G, 11.58, 0.25, z0 + 0.006, 11.62, 5.92, z0 + 0.016, M.steel_black, { r: 0 });
   // black vertical-slat wall behind the desks (bathroom block south face) and black TV wall (bathroom block east face)
   bx(G, 0.2, 6.0, z0, 3.86, 6.04, zc, F.black, { r: 0 });
@@ -1449,7 +1449,7 @@ const yawToward = (dx, dy) => Math.atan2(-dx, dy);
       bx(G, edge - side * 0.3 - 0.07, mid - 0.22, z0 + 0.75, edge - side * 0.3 + 0.07, mid + 0.22, z0 + 0.765, M.table_black, { r: 0.003 });
       const px = side < 0 ? xA - 0.0 : xB - 0.42; bx(G, px + (side < 0 ? 0.02 : 0), dy1 - 0.62, z0, px + (side < 0 ? 0.42 : 0.4), dy1 - 0.04, z0 + 0.62, F.black, { r: 0.01 });
       place(mc, G, edge + side * 0.45, mid - 0.15, z0, yawToward(-side, 0)); } };
-  cluster(2.0, 0.85, 3); cluster(5.35, 0.85, 3); cluster(8.7, 0.85, 3);
+  cluster(2.0, 0.85, 3); cluster(5.35, 0.85, 3); cluster(8.7, 2.25, 2);
 
   // ---- lounge against the courtyard glazing: four pale grey armchairs on black steel tube frames, round white table, big olive planter
   const armchair = () => { const g = new THREE.Group(), add = (geo, mat) => { const m = new THREE.Mesh(geo, mat); m.castShadow = m.receiveShadow = true; g.add(m); return m; };
@@ -1759,6 +1759,7 @@ const LBL = DATA.labels.map(l => { const el = document.createElement('div'); el.
 const state = { view: 'ext', walkFloor: 'GF', fit: true, lbl: true, stair: true, fac: true, roof: true, cur: true, hq: true, explode: 0, explodeTarget: 0 };
 if (window.__noHQ) { state.hq = false; document.getElementById('l-hq').checked = false; }
 const controls = new OrbitControls(camera, renderer.domElement);
+window.__cam = { camera, controls };
 controls.enableDamping = true; controls.dampingFactor = 0.08; controls.maxPolarAngle = Math.PI * 0.495; controls.minDistance = 2; controls.maxDistance = 120;
 const PRESETS = {
   ext: { pos: [5.5, 2.8, 37], tgt: [12.5, 3.8, -2], hint: 'Click anywhere to jump there · drag to orbit · scroll to zoom', chip: 'Exterior' },
@@ -1801,7 +1802,7 @@ cvs.addEventListener('pointerdown', e => { if (!isWalk()) return; dragging = tru
 cvs.addEventListener('pointermove', e => { if (!dragging) return; walk.yaw -= (e.clientX - lx) * 0.004; walk.pitch = Math.max(-1.2, Math.min(1.2, walk.pitch - (e.clientY - ly) * 0.004)); lx = e.clientX; ly = e.clientY; });
 cvs.addEventListener('pointerup', () => dragging = false);
 cvs.addEventListener('wheel', e => { if (!isWalk()) return; e.preventDefault(); walk.imp = (walk.imp || 0) - Math.sign(e.deltaY) * 0.6; }, { passive: false });
-addEventListener('keydown', e => { if (isWalk() && !window.__baristaActive) { walk.keys[e.key.toLowerCase()] = true; if (e.key.startsWith('Arrow')) e.preventDefault(); } });
+addEventListener('keydown', e => { if (isWalk() && !window.__baristaActive && !window.__menuOpen) { walk.keys[e.key.toLowerCase()] = true; if (e.key.startsWith('Arrow')) e.preventDefault(); } });
 addEventListener('keyup', e => { walk.keys[e.key.toLowerCase()] = false; });
 document.querySelectorAll('#pad button').forEach(b => { const k = b.dataset.k;
   b.addEventListener('pointerdown', e => { e.preventDefault(); walk.keys['pad_' + k] = true; });
@@ -2378,4 +2379,54 @@ window.__exportGLB = () => new Promise((res, rej) => {
     hemi.intensity = walking ? 0.22 : 0.35;
     assignPool(now); updateProbe(now);
   };
+}
+
+// ================================================================== MENU (hamburger + overlay)
+{
+  const btn = document.getElementById('menubtn'), menu = document.getElementById('menu'), closeBtn = menu.querySelector('.m__x');
+  const scrim = document.createElement('div'); scrim.className = 'm-scrim'; document.body.appendChild(scrim);
+  const tabs = [...menu.querySelectorAll('[role="tab"]')];
+  const isOpen = () => menu.classList.contains('is-open');
+  const focusables = () => [...menu.querySelectorAll('button, input, [tabindex]:not([tabindex="-1"])')].filter(e => !e.closest('[hidden]') && e.offsetParent !== null);
+  function open() {
+    window.__menuOpen = true; for (const k in walk.keys) walk.keys[k] = false;
+    menu.classList.add('is-open'); scrim.classList.add('on'); menu.setAttribute('aria-hidden', 'false'); btn.setAttribute('aria-expanded', 'true');
+    setTimeout(() => closeBtn.focus(), 30);
+  }
+  function close(returnFocus = true) {
+    if (!isOpen()) return;
+    window.__menuOpen = false;
+    menu.classList.remove('is-open'); scrim.classList.remove('on'); menu.setAttribute('aria-hidden', 'true'); btn.setAttribute('aria-expanded', 'false');
+    if (returnFocus) btn.focus({ preventScroll: true });
+  }
+  function selectTab(t, focus) {
+    tabs.forEach(x => { const on = x === t; x.setAttribute('aria-selected', String(on)); x.tabIndex = on ? 0 : -1; document.getElementById(x.getAttribute('aria-controls')).hidden = !on; });
+    if (focus) t.focus();
+    menu.querySelector('.m__body').scrollTop = 0;
+  }
+  btn.addEventListener('click', () => (isOpen() ? close() : open()));
+  closeBtn.addEventListener('click', () => close());
+  scrim.addEventListener('click', () => close());
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => selectTab(t));
+    t.addEventListener('keydown', e => {
+      const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+      if (d) { e.preventDefault(); selectTab(tabs[(i + d + tabs.length) % tabs.length], true); }
+    });
+  });
+  // picking a place to go takes you straight there
+  menu.querySelectorAll('[data-view], #walkfloor button').forEach(b => b.addEventListener('click', () => setTimeout(() => close(false), 120)));
+  document.addEventListener('keydown', e => {
+    if (!isOpen()) return;
+    if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
+    if (e.key === 'Tab') {
+      const f = focusables(); if (!f.length) return;
+      const first = f[0], last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  }, true);
+  // hide the menu button during the first-person barista mode (its Exit button sits top-right)
+  const vr = document.getElementById('vr');
+  if (vr) new MutationObserver(() => { btn.hidden = !vr.hidden; if (!vr.hidden) close(false); }).observe(vr, { attributes: true, attributeFilter: ['hidden'] });
 }

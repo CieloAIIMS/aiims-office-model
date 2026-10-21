@@ -28,16 +28,23 @@
         <div><button type="button" id="vr-again">Make another</button><button type="button" id="vr-done">Done</button></div></div>
     </div>
     <div id="jumpmark" hidden></div>
+    <button id="menubtn" class="mbtn" type="button" aria-expanded="false" aria-controls="menu"><span class="burger" aria-hidden="true"><i></i><i></i></span>Menu</button>
     <div id="hint">Click anywhere to jump there · drag to orbit · scroll to zoom</div>
   </div>
-  <aside>
-    <div class="brand">
-      <h1>AIIMS <span>Office</span></h1>
-      <p>Two-storey office and warehouse, rebuilt in 3D from the floor plans and site photos.</p>
+  <aside id="menu" class="m" role="dialog" aria-modal="true" aria-label="Menu" aria-hidden="true">
+    <div class="m__head">
+      <p class="m__brand">AIIMS <span>Office</span></p>
+      <button class="m__x" type="button" aria-label="Close menu">&#x2715;</button>
     </div>
-    <div class="sec">
-      <h2>Spaces</h2>
-      <div class="spaces" role="group" aria-label="Spaces">
+    <div class="m__tabs" role="tablist" aria-label="Menu sections">
+      <button type="button" role="tab" id="mt-spaces" data-tab="spaces" aria-controls="mp-spaces" aria-selected="true">Spaces</button>
+      <button type="button" role="tab" id="mt-view" data-tab="view" aria-controls="mp-view" aria-selected="false" tabindex="-1">View</button>
+      <button type="button" role="tab" id="mt-layers" data-tab="layers" aria-controls="mp-layers" aria-selected="false" tabindex="-1">Layers</button>
+      <button type="button" role="tab" id="mt-about" data-tab="about" aria-controls="mp-about" aria-selected="false" tabindex="-1">About</button>
+    </div>
+    <div class="m__body">
+      <section class="m__panel" id="mp-spaces" role="tabpanel" aria-labelledby="mt-spaces">
+        <div class="spaces" role="group" aria-label="Spaces">
         <button id="sp-lounge" data-view="sp-lounge" aria-pressed="false"><span>Entry lounge</span><small>Ground</small></button>
         <button id="sp-walk" data-view="sp-walk" aria-pressed="false"><span>Entry · walk-through</span><small>Ground</small></button>
         <button id="sp-ware" data-view="sp-ware" aria-pressed="false"><span>Warehouse</span><small>Ground</small></button>
@@ -54,10 +61,9 @@
         <button id="sp-dining" data-view="sp-dining" aria-pressed="false"><span>Kitchen · dining nook</span><small>Upper</small></button>
         <button id="sp-office" data-view="sp-office" aria-pressed="false"><span>East open area</span><small>Upper</small></button>
       </div>
-    </div>
-    <div class="sec">
-      <h2>View</h2>
-      <div class="views" role="group" aria-label="View">
+      </section>
+      <section class="m__panel" id="mp-view" role="tabpanel" aria-labelledby="mt-view" hidden>
+        <div class="views" role="group" aria-label="View">
         <button id="v-ext" data-view="ext" aria-pressed="true">Exterior<small>Street side</small></button>
         <button id="v-gf" data-view="gf" aria-pressed="false">Ground<small>FFL 0.00</small></button>
         <button id="v-uf" data-view="uf" aria-pressed="false">Upper<small>FFL +4.45</small></button>
@@ -65,24 +71,24 @@
         <button id="v-walk" data-view="walk" aria-pressed="false">Walk<small>Eye 1.65 m</small></button>
         <button id="v-top" data-view="top" aria-pressed="false">Plan<small>Top down</small></button>
       </div>
-      <div class="seg" id="walkfloor" role="group" aria-label="Walk floor" hidden>
+        <div class="seg" id="walkfloor" role="group" aria-label="Walk floor" hidden>
         <button id="wf-gf" data-f="GF" aria-pressed="true">Walk ground</button>
         <button id="wf-uf" data-f="UF" aria-pressed="false">Walk upper</button>
       </div>
-    </div>
-    <div class="sec">
-      <h2>Layers</h2>
-      <label class="tog">Office fit-out<em>illustrative</em><input type="checkbox" id="l-fit" checked><span class="sw"></span></label>
+      </section>
+      <section class="m__panel" id="mp-layers" role="tabpanel" aria-labelledby="mt-layers" hidden>
+        <label class="tog">Office fit-out<em>illustrative</em><input type="checkbox" id="l-fit" checked><span class="sw"></span></label>
       <label class="tog">Room labels<input type="checkbox" id="l-lbl" checked><span class="sw"></span></label>
       <label class="tog">Stair<em>provisional</em><input type="checkbox" id="l-stair" checked><span class="sw"></span></label>
       <label class="tog">Sunshade fins<input type="checkbox" id="l-fac" checked><span class="sw"></span></label>
       <label class="tog">Curtains<input type="checkbox" id="l-cur" checked><span class="sw"></span></label>
       <label class="tog">Roof<em>provisional</em><input type="checkbox" id="l-roof" checked><span class="sw"></span></label>
       <label class="tog">Realistic lighting<em>AO + glow</em><input type="checkbox" id="l-hq" checked><span class="sw"></span></label>
-    </div>
-    <div class="sec">
-      <h2>Key dimensions</h2>
-      <dl class="spec">
+      </section>
+      <section class="m__panel" id="mp-about" role="tabpanel" aria-labelledby="mt-about" hidden>
+        <p class="m__lede">Two-storey office and warehouse, rebuilt in 3D from the floor plans and site photos.</p>
+        <h2 class="m__kicker">Key dimensions</h2>
+        <dl class="spec">
         <dt>Footprint</dt><dd>16.84 × 25.86 m</dd>
         <dt>Warehouse</dt><dd>13.0 × 5.5 m</dd>
         <dt>Warehouse height</dt><dd>4.20 m</dd>
@@ -91,7 +97,8 @@
         <dt>Upper floor level</dt><dd>+4.45 m est.</dd>
         <dt>Workstations shown</dt><dd>38</dd>
       </dl>
+        <p class="note"><b>How to read this.</b> Walls, glazing, doors, joinery and amenities come from the calibrated Review 01 reconstruction. The entry lounge, courtyard, warehouse, storage studio, kitchen, front open area, design room and east open area are finished from site photos. The street frontage, sign tower, neighbouring warehouse, parking canopy and the AIIMS Jimny follow the street photo. Other desks, tables and plants are an illustrative fit-out. The roof, upper floor level and stair are estimates.</p>
+      </section>
     </div>
-    <p class="note"><b>How to read this.</b> Walls, glazing, doors, joinery and amenities come from the calibrated Review 01 reconstruction. The entry lounge, courtyard, warehouse, storage studio, kitchen, front open area, design room and east open area are finished from site photos. The street frontage, sign tower, neighbouring warehouse, parking canopy and the AIIMS Jimny follow the street photo. Other desks, tables and plants are an illustrative fit-out. The roof, upper floor level and stair are estimates.</p>
   </aside>
 </div>

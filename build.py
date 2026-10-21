@@ -3,7 +3,9 @@ Outputs: model_data.json (compact, for the web viewer), AIIMS_office_model.glb, 
 import json, math, struct
 import numpy as np
 
-SRC = 'ref/AIIMS_Architectural_Reconstruction_Review_01/audit/geometry.json'
+import os
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
+SRC = 'data/geometry.json'
 g = json.load(open(SRC))
 UFZ = 4.45
 
@@ -261,7 +263,7 @@ for i,a in enumerate(RECTS):
             problems.append((a['name'],b['name'],round(ox,2),round(oy,2)))
 print('fitout objects', len(FIT), 'collisions', len(problems))
 for p in problems: print('  ',p)
-json.dump([dict(floor=r['floor'],rect=r['rect']) for r in RECTS], open('fitout.json','w'))
+json.dump([dict(floor=r['floor'],rect=r['rect']) for r in RECTS], open('data/fitout.json','w'))
 
 # ---------------------------------------------------------------- triangulation
 def tri_face(pts, idx):
@@ -349,7 +351,7 @@ for (fl,layer,mat),G in sorted(groups.items()):
     out['groups'].append({'floor':fl,'layer':layer,'mat':mat,
         'v':[round(float(a),3) for a in vy.flatten()], 'i':G['i']})
     tris+=len(G['i'])//3
-json.dump(out, open('model_data.json','w'), separators=(',',':'))
+json.dump(out, open('data/model_data.json','w'), separators=(',',':'))
 print('groups',len(out['groups']),'tris',tris)
 
 # ---------------------------------------------------------------- GLB export
@@ -367,7 +369,7 @@ COLORS={
  'rack':(0.15,0.30,0.55,1),'rack_deck':(0.85,0.52,0.15,1),'pallet':(0.70,0.57,0.40,1),
  'carton':(0.72,0.58,0.40,1),'timber':(0.62,0.47,0.32,1),
 }
-json.dump(COLORS, open('colors.json','w'))
+json.dump(COLORS, open('data/colors.json','w'))
 
 def glb(path, include_hidden=False):
     nodes=[];meshes=[];materials=[];accessors=[];views=[];blob=bytearray()
