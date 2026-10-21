@@ -1779,10 +1779,10 @@ const WALK_START = { GF: { p: [11.9, 1.0], yaw: 0, pitch: -0.05, eye: 1.65 }, UF
   'sp-walk': { p: [12.4, 5.9], yaw: 0.17, pitch: 0.06, eye: 1.5, name: 'Entry lounge · walk-through' },
   'sp-window': { p: [14.05, 17.6], yaw: Math.PI + 0.05, pitch: -0.05, eye: 1.55, name: 'Warehouse · podcast window' },
   'sp-kynan': { p: [8.6, 18.9], yaw: Math.PI / 2 + 0.1, pitch: 0.06, eye: 1.55, name: 'Warehouse · Kynan' },
-  'sp-lounge': { p: [11.6, 2.35], yaw: -0.62, pitch: 0.06, eye: 1.45, name: 'Entry lounge' },
+  'sp-lounge': { p: [11.6, 2.35], yaw: -0.62, pitch: 0.06, eye: 1.45, name: 'Entry' },
   'sp-court': { p: [6.75, 10.45], yaw: -0.12, pitch: 0.1, eye: 1.3, f: 'UF', name: 'Courtyard' },
-  'sp-ware': { p: [16.2, 20.3], yaw: Math.PI / 2 + 0.5, pitch: 0.06, eye: 1.5, name: 'Warehouse' },
-  'sp-photo': { p: [8.6, 21.4], yaw: 0.78, pitch: 0.02, eye: 1.5, name: 'Storage · photo area' },
+  'sp-ware': { p: [16.2, 20.3], yaw: Math.PI / 2 + 0.5, pitch: 0.06, eye: 1.5, name: 'Creator Hub' },
+  'sp-photo': { p: [8.6, 21.4], yaw: 0.78, pitch: 0.02, eye: 1.5, name: 'Studio' },
   'sp-studio': { p: [10.1, 21.35], yaw: 0, pitch: -0.04, eye: 1.4, name: 'Storage · podcast set' },
   'sp-desks': { p: [12.4, 21.45], yaw: -0.72, pitch: 0.04, eye: 1.45, name: 'Storage · black desks' },
   'sp-common': { p: [12.1, 6.4], yaw: 0.8, pitch: -0.02, eye: 1.5, f: 'UF', name: 'Common Area' },
@@ -1790,7 +1790,9 @@ const WALK_START = { GF: { p: [11.9, 1.0], yaw: 0, pitch: -0.05, eye: 1.65 }, UF
   'sp-design': { p: [13.45, 8.3], yaw: -2.5, pitch: -0.2, eye: 1.7, f: 'UF', name: 'Design' },
   'sp-kitchen': { p: [12.4, 20.5], yaw: 0.55, pitch: 0.02, eye: 1.4, f: 'UF', name: 'Kitchen' },
   'sp-dining': { p: [12.75, 21.6], yaw: -0.8, pitch: 0.02, eye: 1.3, f: 'UF', name: 'Kitchen · dining nook' },
-  'sp-office': { p: [10.5, 20.5], yaw: -2.77, pitch: -0.06, eye: 1.55, f: 'UF', name: 'East open area' } };
+  'sp-office': { p: [10.5, 20.5], yaw: -2.77, pitch: -0.06, eye: 1.55, f: 'UF', name: 'East open area' },
+  'sp-dev': { p: [15.6, 16.35], yaw: 0.87, pitch: -0.1, eye: 1.6, f: 'UF', name: 'DEV' },     // north desk cluster, by the kitchen
+  'sp-seo': { p: [15.6, 16.35], yaw: 2.3, pitch: -0.08, eye: 1.6, f: 'UF', name: 'SEO' } };  // south desk cluster, by the AIIMS mural wall
 function enterWalk(key) {
   const s = WALK_START[key], fl = s.f || 'GF'; state.walkFloor = fl;
   walk.pos.set(s.p[0], (fl === 'UF' ? UFZ : 0) + s.eye, -s.p[1]); walk.yaw = s.yaw; walk.pitch = s.pitch;
@@ -1887,7 +1889,9 @@ resize(); camera.position.set(...PRESETS.ext.pos); controls.target.set(...PRESET
 document.getElementById('loading').hidden = true;
 requestAnimationFrame(frame);
 // Deep links: index.html#sp-kitchen opens a space; an embedding page can postMessage({ aiimsView: 'sp-kitchen' }).
-const openView = v => { const b = document.querySelector(`[data-view="${CSS.escape(v || '')}"]`); if (b) b.click(); };
+// spaces merged out of the menu still resolve, so old links keep working
+const VIEW_ALIAS = { 'sp-walk': 'sp-lounge', 'sp-kynan': 'sp-ware', 'sp-window': 'sp-ware', 'sp-studio': 'sp-photo', 'sp-desks': 'sp-photo', 'sp-front': 'sp-common', 'sp-dining': 'sp-kitchen', 'sp-office': 'sp-dev' };
+const openView = v => { v = VIEW_ALIAS[v] || v; const b = document.querySelector(`[data-view="${CSS.escape(v || '')}"]`); if (b) b.click(); };
 addEventListener('hashchange', () => openView(decodeURIComponent(location.hash.slice(1))));
 addEventListener('message', e => { if (e.data && typeof e.data.aiimsView === 'string') openView(e.data.aiimsView); });
 if (location.hash) openView(decodeURIComponent(location.hash.slice(1)));

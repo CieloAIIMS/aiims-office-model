@@ -44,22 +44,20 @@
     </div>
     <div class="m__body">
       <section class="m__panel" id="mp-spaces" role="tabpanel" aria-labelledby="mt-spaces">
-        <div class="spaces" role="group" aria-label="Spaces">
-        <button id="sp-lounge" data-view="sp-lounge" aria-pressed="false"><span>Entry lounge</span><small>Ground</small></button>
-        <button id="sp-walk" data-view="sp-walk" aria-pressed="false"><span>Entry · walk-through</span><small>Ground</small></button>
-        <button id="sp-ware" data-view="sp-ware" aria-pressed="false"><span>Warehouse</span><small>Ground</small></button>
-        <button id="sp-kynan" data-view="sp-kynan" aria-pressed="false"><span>Warehouse · Kynan</span><small>Ground</small></button>
-        <button id="sp-window" data-view="sp-window" aria-pressed="false"><span>Warehouse · podcast window</span><small>Ground</small></button>
-        <button id="sp-photo" data-view="sp-photo" aria-pressed="false"><span>Storage · photo area</span><small>Ground</small></button>
-        <button id="sp-studio" data-view="sp-studio" aria-pressed="false"><span>Storage · podcast set</span><small>Ground</small></button>
-        <button id="sp-desks" data-view="sp-desks" aria-pressed="false"><span>Storage · black desks</span><small>Ground</small></button>
-        <button id="sp-front" data-view="sp-front" aria-pressed="false"><span>Front open area</span><small>Upper</small></button>
-        <button id="sp-common" data-view="sp-common" aria-pressed="false"><span>Common Area</span><small>Upper</small></button>
-        <button id="sp-design" data-view="sp-design" aria-pressed="false"><span>Design</span><small>Upper</small></button>
-        <button id="sp-court" data-view="sp-court" aria-pressed="false"><span>Courtyard</span><small>Upper</small></button>
-        <button id="sp-kitchen" data-view="sp-kitchen" aria-pressed="false"><span>Kitchen</span><small>Upper</small></button>
-        <button id="sp-dining" data-view="sp-dining" aria-pressed="false"><span>Kitchen · dining nook</span><small>Upper</small></button>
-        <button id="sp-office" data-view="sp-office" aria-pressed="false"><span>East open area</span><small>Upper</small></button>
+        <h2 class="m__kicker">Ground</h2>
+        <div class="spaces" role="group" aria-label="Ground floor spaces">
+        <button id="sp-lounge" data-view="sp-lounge" aria-pressed="false"><span>Entry</span></button>
+        <button id="sp-ware" data-view="sp-ware" aria-pressed="false"><span>Creator Hub</span></button>
+        <button id="sp-photo" data-view="sp-photo" aria-pressed="false"><span>Studio</span></button>
+        </div>
+        <h2 class="m__kicker">Upper</h2>
+        <div class="spaces" role="group" aria-label="Upper floor spaces">
+        <button id="sp-common" data-view="sp-common" aria-pressed="false"><span>Common Area</span></button>
+        <button id="sp-design" data-view="sp-design" aria-pressed="false"><span>Design</span></button>
+        <button id="sp-court" data-view="sp-court" aria-pressed="false"><span>Courtyard</span></button>
+        <button id="sp-kitchen" data-view="sp-kitchen" aria-pressed="false"><span>Kitchen</span></button>
+        <button id="sp-dev" data-view="sp-dev" aria-pressed="false"><span>DEV</span></button>
+        <button id="sp-seo" data-view="sp-seo" aria-pressed="false"><span>SEO</span></button>
       </div>
       </section>
       <section class="m__panel" id="mp-view" role="tabpanel" aria-labelledby="mt-view" hidden>
