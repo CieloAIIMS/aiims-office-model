@@ -1801,7 +1801,7 @@ function enterWalk(key) {
 let dragging = false, lx = 0, ly = 0;
 const cvs = renderer.domElement;
 cvs.addEventListener('pointerdown', e => { if (!isWalk()) return; dragging = true; lx = e.clientX; ly = e.clientY; cvs.setPointerCapture(e.pointerId); });
-cvs.addEventListener('pointermove', e => { if (!dragging) return; walk.yaw -= (e.clientX - lx) * 0.004; walk.pitch = Math.max(-1.2, Math.min(1.2, walk.pitch - (e.clientY - ly) * 0.004)); lx = e.clientX; ly = e.clientY; });
+cvs.addEventListener('pointermove', e => { if (!dragging) return; walk.yaw += (e.clientX - lx) * 0.004; walk.pitch = Math.max(-1.2, Math.min(1.2, walk.pitch + (e.clientY - ly) * 0.004)); lx = e.clientX; ly = e.clientY; });
 cvs.addEventListener('pointerup', () => dragging = false);
 cvs.addEventListener('wheel', e => { if (!isWalk()) return; e.preventDefault(); walk.imp = (walk.imp || 0) - Math.sign(e.deltaY) * 0.6; }, { passive: false });
 addEventListener('keydown', e => { if (isWalk() && !window.__baristaActive && !window.__menuOpen) { walk.keys[e.key.toLowerCase()] = true; if (e.key.startsWith('Arrow')) e.preventDefault(); } });
