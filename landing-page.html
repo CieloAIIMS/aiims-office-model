@@ -87,7 +87,7 @@ h2{margin:0;font-size:clamp(32px,3.4vw,48px);line-height:1;font-weight:900;lette
 .spaces .intro p{margin:0;max-width:520px;color:var(--ink-60);font-size:17px}
 .level{margin-top:36px}
 .level h3{margin:0 0 14px;color:var(--ink-60)}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
 .space{display:flex;flex-direction:column;justify-content:space-between;gap:28px;min-height:138px;padding:20px;border:1px solid var(--ink-line);border-radius:var(--radius);background:#F8F8F7;color:var(--ink);text-align:left;font:inherit;cursor:pointer;transition:border-color .2s var(--ease),background .2s var(--ease),transform .2s var(--ease)}
 .space:hover{border-color:var(--ink);background:#fff;transform:translateY(-2px)}
 .space strong{font-size:19px;line-height:1.2;font-weight:700;letter-spacing:-.01em}
@@ -201,14 +201,14 @@ footer{padding:72px 0 40px;color:var(--grey-72)}
     <div class="wrap">
       <p class="eyebrow mono"><i></i>AIIMS HQ · Strathfield South, Sydney</p>
       <h1>Step inside <em>AIIMS</em> HQ.</h1>
-      <p class="lede">Walk through our two-storey office and warehouse in 3D. Start in the entry lounge, then visit the podcast set, design studio, courtyard and kitchen. It runs in your browser, with nothing to install.</p>
+      <p class="lede">Walk through our two-storey office and warehouse in 3D. Start at the entry, then visit the Creator Hub, the studio, the design team, the courtyard and the kitchen. It runs in your browser, with nothing to install.</p>
       <div class="actions">
         <a class="btn" href="#tour">Start the tour <span class="arr" aria-hidden="true">→</span></a>
         <a class="btn ghost" href="https://aiims.group/contact/">Book a visit</a>
       </div>
       <div class="facts">
         <div><b>2</b><span class="mono">Levels</span></div>
-        <div><b>15</b><span class="mono">Spaces to explore</span></div>
+        <div><b>9</b><span class="mono">Spaces to explore</span></div>
         <div><b>6</b><span class="mono">Camera views</span></div>
         <div><b>1.65&nbsp;m</b><span class="mono">Walk-mode eye height</span></div>
       </div>
@@ -245,27 +245,21 @@ footer{padding:72px 0 40px;color:var(--grey-72)}
       <div class="level">
         <h3 class="mono">Ground floor · FFL 0.00</h3>
         <div class="grid">
-          <button class="space" data-view="sp-lounge"><span><strong>Entry lounge</strong><small>Where every visit starts.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-walk"><span><strong>Entry walk-through</strong><small>Through the front door and inside.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-ware"><span><strong>Warehouse</strong><small>The big open ground-floor space.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-kynan"><span><strong>Kynan’s hoop</strong><small>Meet Kynan in the warehouse.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-window"><span><strong>Podcast window</strong><small>A look into the studio from the warehouse.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-studio"><span><strong>Podcast set</strong><small>Home of AIIMS Creator Hub.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-photo"><span><strong>Photo area</strong><small>Set up for product and portrait shoots.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-desks"><span><strong>Black desks</strong><small>Workstations in the storage wing.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-lounge"><span><strong>Entry</strong><small>The lounge and front door, where every visit starts.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-ware"><span><strong>Creator Hub</strong><small>The warehouse, with Kynan’s hoop and the podcast window.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-photo"><span><strong>Studio</strong><small>The photo area, podcast set and black desks.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
         </div>
       </div>
 
       <div class="level">
         <h3 class="mono">Upper floor · FFL +4.45</h3>
         <div class="grid">
-          <button class="space" data-view="sp-front"><span><strong>Front open area</strong><small>The open floor at the front of the building.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-common"><span><strong>Common area</strong><small>Shared space for the whole team.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-common"><span><strong>Common Area</strong><small>Shared space at the front of the upper floor.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
           <button class="space" data-view="sp-design"><span><strong>Design</strong><small>Where the creative team works.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
           <button class="space" data-view="sp-court"><span><strong>Courtyard</strong><small>Open air, upstairs.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-kitchen"><span><strong>Kitchen</strong><small>Coffee machine included.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-dining"><span><strong>Dining nook</strong><small>A seat by the kitchen.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
-          <button class="space" data-view="sp-office"><span><strong>East open area</strong><small>Desks along the east side.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-kitchen"><span><strong>Kitchen</strong><small>Coffee machine and dining nook.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-dev"><span><strong>DEV</strong><small>The north desks, by the kitchen.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
+          <button class="space" data-view="sp-seo"><span><strong>SEO</strong><small>The south desks, by the AIIMS mural wall.</small></span><span class="go mono">Go <span aria-hidden="true">→</span></span></button>
         </div>
       </div>
     </div>
@@ -291,7 +285,7 @@ footer{padding:72px 0 40px;color:var(--grey-72)}
           <span class="mono">03 · Warehouse</span>
           <h3>Shoot some hoops</h3>
           <p>Find Kynan in the warehouse and click him. He can bounce the ball or shoot it at the hoop.</p>
-          <button class="btn ghost" data-view="sp-kynan">Find Kynan</button>
+          <button class="btn ghost" data-view="sp-ware">Find Kynan</button>
         </article>
       </div>
     </div>
